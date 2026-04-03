@@ -16,8 +16,8 @@ The blog goes step by step into the different constants/variable used to make ad
 
 K =
 | 0.5 | N <= 3 |
-| 0.5 - 1/30 * (N-6) | 3<N<5 |
-| 0.3 | N > 5 |
+| 0.5 - 1/30 * (N-6) | 3<N<7 |
+| 0.3 | N > 7 |
 
 Now for the problematic one, M. M is a constant that is used as a defensive factor. As I mentioned before, FRC is naturally different than FTC, this difference now comes in play. In FRC, it is extremely common for teams to pick other teams purely because they are able to complete shut down other team from play (in a GP mannor ofc). If you recall (yes I am testing you), the M factor is used to consider surprises, based on if you scored more than you were supposed to (without penalties) or if the opposing alliance scored less than anticipated. Because it is more likely for teams to have disconnections on the field compared to having heavy defense played on them, we will be ignored this consistant for the time being.
 
