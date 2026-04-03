@@ -1,4 +1,4 @@
-#Welcome!
+Welcome!
 
 This document will cover a step-by-step understanding of the process to calculate EPA from other statistics like OPR and ELO. The purpose of EPA is provide almost a ranking for each FTC team similar to how FRC uses it. We can predict matches and have much more accurate power rankings with EPA! Now let's get into it!
 
@@ -8,4 +8,12 @@ Here's the link, read all five post https://www.statbotics.io/blog
 Step 1: FTC vs FRC
 EPA is considered to be the holy grail of stats in FRC, since the developer made sure that every calculation and every variable worked hand in hand with the nature of FRC to be highly accurate. So a lot of the heavy work is done luckily. However, FTC is naturely different from FRC.
 
-Let focus on mainly on the calculations for an individual's OPR. The first issue presents itself when setting an initial EPA at the beginning of the season. FRC only has 7 weeks of competition before the Championship. FTC runs from November to March, nearly 5 months worth of competitions include an additional month before the Championship (this will not effect the calculations). 
+Let focus on mainly on the calculations for an individual's OPR. The first assumption will be that the initial EPA will be based on the average scores of the first TWO weeks of competition to get a much better understand of the average score and to get more data from various regions. 
+
+Step 2: Constants to be considered.
+
+The blog goes step by step into the different constants/variable used to make adjustments based on the nature of the competition. The first change that will be done is with the K constant. The K constant updates the weight that the score difference from the predicted score compared to the actual score has on a team's EPA. However, this constant changes based on the number of matches a team plays. This is to avoid having a zero-sum, basically the EPA has inflation and an EPA of 1000 in the first month is not the same in March. Now because teams in my region only play 12 matches in a entire season, the number of matchs to update the K value will be change to properly reflect adjustements through the season. The piecewise function will look like the following:
+
+K = |0.5| N <= 3|
+    |0.5 - 1/30 * (N-6)| 3<N<5|
+    |0.3 | N > 5|
