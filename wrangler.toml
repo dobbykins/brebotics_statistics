@@ -1,0 +1,20 @@
+# wrangler.toml — Cloudflare Worker config for FTC Events API proxy
+#
+# 1. Install Wrangler:   npm install -g wrangler
+# 2. Log in:             wrangler login
+# 3. Deploy:             wrangler deploy
+#
+# Your worker will be live at:
+#   https://ftc-proxy.<your-cf-subdomain>.workers.dev
+
+name       = "ftc-proxy"
+main       = "ftc-proxy-worker.js"
+compatibility_date = "2024-09-23"
+
+# Free plan workers.dev route — no custom domain needed
+workers_dev = true
+
+# Optional: bind a custom domain instead of workers.dev
+# [[routes]]
+# pattern = "ftcproxy.yourdomain.com/*"
+# zone_name = "yourdomain.com"

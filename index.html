@@ -1,0 +1,2124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FTC EPA · Decode 2025–26</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f6f8fb;--bg2:#ffffff;--bg3:#f0f3f7;--bg4:#e4e8ef;
+  --border:#e0e4ec;--border2:#c8cdd8;
+  --text:#0f1117;--text2:#4a5568;--text3:#94a3b8;
+  --accent:#2563eb;--accent-dim:rgba(37,99,235,0.08);--accent2:#3b82f6;
+  --green:#16a34a;--green-dim:rgba(22,163,74,0.09);
+  --red:#dc2626;--red-dim:rgba(220,38,38,0.09);
+  --yellow:#d97706;--yellow-dim:rgba(217,119,6,0.09);
+  --purple:#7c3aed;--purple-dim:rgba(124,58,237,0.09);
+  --orange:#ea580c;--orange-dim:rgba(234,88,12,0.09);
+  --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
+  --r:6px;--r2:10px;--r3:14px;
+  --shadow:0 1px 3px rgba(0,0,0,0.07);--shadow2:0 4px 16px rgba(0,0,0,0.11);
+  --header-h:56px;--nav-h:44px;
+}
+[data-theme="dark"]{
+  --bg:#0e1117;--bg2:#161b27;--bg3:#1c2235;--bg4:#222840;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --text:#e8ecf4;--text2:#7e8fa8;--text3:#3f4e65;
+  --accent:#3b82f6;--accent-dim:rgba(59,130,246,0.12);--accent2:#60a5fa;
+  --green:#22c55e;--green-dim:rgba(34,197,94,0.10);
+  --red:#f87171;--red-dim:rgba(248,113,113,0.10);
+  --yellow:#fbbf24;--yellow-dim:rgba(251,191,36,0.10);
+  --purple:#a78bfa;--purple-dim:rgba(167,139,250,0.10);
+  --orange:#fb923c;--orange-dim:rgba(251,146,60,0.10);
+  --shadow:0 1px 3px rgba(0,0,0,0.4);--shadow2:0 4px 16px rgba(0,0,0,0.5);
+}
+html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.5;transition:background .2s,color .2s}
+.shell{display:flex;flex-direction:column;min-height:100vh}
+.header{height:var(--header-h);background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;gap:16px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.logo-wrap{display:flex;align-items:center;gap:10px}
+.logo-icon{width:30px;height:30px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-icon svg{width:16px;height:16px;fill:white}
+.logo-mark{font-size:15px;font-weight:700;color:var(--text);letter-spacing:-.02em}
+.logo-sub{font-size:10px;color:var(--text3);font-family:var(--mono)}
+.header-div{width:1px;height:22px;background:var(--border)}
+.season-badge{font-family:var(--mono);font-size:10px;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(37,99,235,.2);padding:3px 9px;border-radius:20px}
+[data-theme="dark"] .season-badge{border-color:rgba(59,130,246,.25)}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.live-indicator{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;color:var(--text3)}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);opacity:.3;transition:opacity .3s;flex-shrink:0}
+.live-dot.on{opacity:1;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.theme-btn{width:30px;height:30px;border-radius:var(--r);border:1px solid var(--border2);background:var(--bg3);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2);transition:all .15s;font-size:13px}
+.theme-btn:hover{background:var(--bg4);color:var(--text)}
+.nav-bar{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;padding:0 28px;gap:2px;position:sticky;top:var(--header-h);z-index:90}
+.nav-item{display:flex;align-items:center;gap:7px;padding:0 14px;height:var(--nav-h);font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;margin-bottom:-1px}
+.nav-item:hover{color:var(--text)}
+.nav-item.active{color:var(--accent);border-bottom-color:var(--accent)}
+.nav-item svg{width:14px;height:14px;flex-shrink:0;opacity:.7}
+.nav-item.active svg{opacity:1}
+.main{max-width:1300px;margin:0 auto;width:100%}
+.content{padding:28px 28px 60px}
+.page-title{font-size:20px;font-weight:700;letter-spacing:-.025em;color:var(--text);margin-bottom:4px}
+.page-desc{font-size:13px;color:var(--text2);margin-bottom:22px}
+.mono{font-family:var(--mono)}.muted{color:var(--text2)}.dim{color:var(--text3)}
+.loading-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;gap:16px;color:var(--text2)}
+.spinner{width:30px;height:30px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .65s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.progress-bar{width:300px;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .3s}
+.epa-bar-track{height:4px;background:var(--bg4);border-radius:2px;overflow:hidden;display:inline-block;width:80px;vertical-align:middle;margin-left:6px}
+.epa-bar-fill{height:100%;background:var(--accent2);border-radius:2px}
+.epa-bar-fill.green{background:var(--green)}
+.epa-bar-fill.orange{background:var(--orange)}
+.load-msg{font-size:12px;font-family:var(--mono);color:var(--text2)}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:18px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:16px 18px;box-shadow:var(--shadow)}
+.sc-label{font-size:10px;font-family:var(--mono);color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.sc-val{font-size:24px;font-weight:700;font-family:var(--mono);line-height:1}
+.sc-sub{font-size:10px;color:var(--text3);margin-top:4px}
+.sc-val.blue{color:var(--accent2)}.sc-val.green{color:var(--green)}.sc-val.red{color:var(--red)}.sc-val.yellow{color:var(--yellow)}.sc-val.purple{color:var(--purple)}.sc-val.orange{color:var(--orange)}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.section-title{font-size:13px;font-weight:600;color:var(--text)}
+.section-sub{font-size:11px;color:var(--text3);font-family:var(--mono)}
+.table-wrap{overflow-x:auto;border-radius:var(--r2);border:1px solid var(--border);background:var(--bg2);box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse}
+thead th{background:var(--bg3);font-family:var(--mono);font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.09em;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none}
+thead th:hover{color:var(--text2)}
+thead th.sorted{color:var(--accent)}
+tbody tr{border-bottom:1px solid var(--border);transition:background .1s;cursor:pointer}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--bg3)}
+tbody td{padding:10px 14px;font-size:13px}
+.tier{display:inline-block;font-size:10px;font-family:var(--mono);padding:2px 7px;border-radius:5px;font-weight:500;letter-spacing:.02em;white-space:nowrap}
+.t-elite  {background:var(--yellow-dim);color:var(--yellow);border:1px solid rgba(245,158,11,.25)}
+.t-strong {background:var(--purple-dim);color:var(--purple);border:1px solid rgba(167,139,250,.25)}
+.t-above  {background:var(--accent-dim);color:var(--accent2);border:1px solid rgba(59,130,246,.22)}
+.t-average{background:var(--green-dim);color:var(--green);border:1px solid rgba(34,197,94,.20)}
+.t-below  {background:var(--orange-dim);color:var(--orange);border:1px solid rgba(249,115,22,.22)}
+.t-develop{background:var(--red-dim);color:var(--red);border:1px solid rgba(239,68,68,.22)}
+.trend-up  {color:var(--green);font-family:var(--mono);font-size:11px}
+.trend-dn  {color:var(--red);font-family:var(--mono);font-size:11px}
+.trend-flat{color:var(--text3);font-family:var(--mono);font-size:11px}
+.inp{background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-family:var(--mono);font-size:13px;padding:8px 12px;border-radius:var(--r);outline:none;transition:border .15s}
+.inp:focus{border-color:var(--accent)}
+.inp::placeholder{color:var(--text3)}
+.select{background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-family:var(--mono);font-size:12px;padding:8px 12px;border-radius:var(--r);outline:none;cursor:pointer}
+.btn{background:var(--bg3);border:1px solid var(--border2);color:var(--text2);font-family:var(--mono);font-size:11px;padding:7px 14px;border-radius:var(--r);cursor:pointer;transition:all .12s;white-space:nowrap}
+.btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+.btn.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent2)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.btn-primary:hover{background:var(--accent2);border-color:var(--accent2);color:#0d0f14}
+.filter-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.filter-chip{font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:var(--bg2);color:var(--text2);cursor:pointer;transition:all .12s;white-space:nowrap}
+.filter-chip:hover{border-color:var(--accent);color:var(--accent)}
+.filter-chip.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+.info-box{background:var(--accent-dim);border:1px solid rgba(59,130,246,.2);border-radius:var(--r);padding:10px 14px;color:var(--accent2);font-family:var(--mono);font-size:11px;margin-bottom:14px}
+.warn-box{background:var(--red-dim);border:1px solid rgba(239,68,68,.2);border-radius:var(--r);padding:10px 14px;color:var(--red);font-family:var(--mono);font-size:11px;margin-bottom:14px}
+.ok-box  {background:var(--green-dim);border:1px solid rgba(34,197,94,.2);border-radius:var(--r);padding:10px 14px;color:var(--green);font-family:var(--mono);font-size:11px;margin-bottom:14px}
+.empty{text-align:center;padding:48px 24px;color:var(--text3);font-family:var(--mono);font-size:12px}
+.divider{border:none;border-top:1px solid var(--border);margin:18px 0}
+.season-select {background: var(--bg3);border: 1px solid var(--border2);color: var(--text);font-family: var(--mono);font-size: 11px;padding: 6px 10px;border-radius: var(--r);cursor: pointer;outline: none;margin-right: 8px;}
+.season-select:hover { border-color: var(--accent2); }
+.pred-grid{display:grid;grid-template-columns:1fr 44px 1fr;gap:12px;align-items:start;margin-bottom:16px}
+.alliance-panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:16px}
+.alliance-panel.red-panel{border-top:2px solid var(--red)}
+.alliance-panel.blue-panel{border-top:2px solid var(--accent)}
+.alliance-label{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+.alliance-label.red{color:var(--red)}.alliance-label.blue{color:var(--accent2)}
+.vs-center{display:flex;align-items:center;justify-content:center;padding-top:40px}
+.vs-text{font-family:var(--mono);font-size:14px;color:var(--text3);font-weight:600}
+.team-inp{background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-family:var(--mono);font-size:13px;padding:8px 10px;border-radius:var(--r);outline:none;width:100%;margin-bottom:4px;transition:border .15s}
+.team-inp.red:focus{border-color:var(--red)}
+.team-inp.blue:focus{border-color:var(--accent)}
+.team-hint{font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:10px;min-height:14px}
+.result-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:20px;margin-top:14px}
+.win-bar{height:8px;border-radius:4px;display:flex;overflow:hidden;margin:12px 0}
+.wb-red{background:var(--red);transition:width .5s cubic-bezier(.4,0,.2,1)}
+.wb-blue{background:var(--accent);transition:width .5s cubic-bezier(.4,0,.2,1)}
+.win-pct{font-family:var(--mono);font-size:20px;font-weight:700}
+.win-pct.red{color:var(--red)}.win-pct.blue{color:var(--accent2)}
+.win-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 12px;border-radius:6px}
+.win-badge.red{background:rgba(239,68,68,.13);color:var(--red);border:1px solid rgba(239,68,68,.28)}
+.win-badge.blue{background:var(--accent-dim);color:var(--accent2);border:1px solid rgba(59,130,246,.28)}
+.score-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.score-group{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px}
+.score-label{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;margin-bottom:12px}
+.score-field label{font-size:9px;color:var(--text3);font-family:var(--mono);display:block;margin-bottom:3px}
+.score-field input{width:100%;background:var(--bg4);border:1px solid var(--border2);color:var(--text);font-family:var(--mono);font-size:16px;font-weight:600;padding:8px 10px;border-radius:var(--r);outline:none;transition:border .15s}
+.score-field input:focus{border-color:var(--accent)}
+.score-2col{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.delta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:10px}
+.delta-card{background:var(--bg4);border:1px solid var(--border);border-radius:var(--r);padding:12px}
+.team-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:20px}
+.team-number{font-family:var(--mono);font-size:36px;font-weight:700;color:var(--accent2)}
+.team-name{font-family:var(--mono);font-size:16px;font-weight:600;color:var(--text2);margin-bottom:8px}
+.epa-breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.epa-item{text-align:center;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px}
+.epa-label{font-size:9px;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.epa-value{font-family:var(--mono);font-size:20px;font-weight:700}
+.uepa-bar{height:5px;background:var(--bg4);border-radius:3px;overflow:hidden;margin:6px 0 3px}
+.uepa-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s}
+.mini-bar{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.mini-label{font-family:var(--mono);font-size:9px;color:var(--text3);width:52px}
+.mini-track{flex:1;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.mini-fill{height:100%;border-radius:2px;transition:width .4s}
+.mini-val{font-family:var(--mono);font-size:9px;color:var(--text2);width:38px;text-align:right}
+.match-history{margin-top:20px}
+.mh-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.mh-row{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);margin-bottom:6px;overflow:hidden;display:grid;grid-template-columns:auto auto 1fr auto auto auto;align-items:stretch;font-family:var(--mono)}
+.mh-level{padding:0 10px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;min-width:52px}
+.mh-level.qual{background:rgba(59,130,246,.10);color:var(--accent2);border-right:1px solid var(--border)}
+.mh-level.playoff{background:rgba(245,158,11,.10);color:var(--yellow);border-right:1px solid var(--border)}
+.mh-event{padding:8px 10px;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--border);min-width:100px}
+.mh-event-code{font-size:11px;font-weight:600;color:var(--text)}
+.mh-event-time{font-size:9px;color:var(--text3)}
+.mh-alliances{padding:8px 12px;display:flex;flex-direction:column;gap:3px;flex:1}
+.mh-alliance{display:flex;align-items:center;gap:6px;font-size:11px}
+.mh-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.mh-dot.red{background:var(--red)}.mh-dot.blue{background:var(--accent)}
+.mh-teams{flex:1;font-size:11px}
+.mh-team-self{font-weight:700;color:var(--text)}
+.mh-team-other{color:var(--text2)}
+.mh-score{padding:8px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-left:1px solid var(--border);min-width:80px;gap:2px}
+.mh-score-val{font-size:14px;font-weight:700}
+.mh-score-lbl{font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em}
+.mh-outcome{padding:0 12px;display:flex;align-items:center;justify-content:center;border-left:1px solid var(--border);min-width:44px}
+.mh-outcome.win{color:var(--green);font-weight:700;font-size:11px}
+.mh-outcome.loss{color:var(--red);font-weight:700;font-size:11px}
+.mh-outcome.tie{color:var(--text3);font-size:11px}
+.mh-outcome.pending{color:var(--text3);font-size:10px}
+.event-browser{display:grid;grid-template-columns:260px 1fr;gap:12px;align-items:start}
+@media(max-width:720px){.event-browser{grid-template-columns:1fr}}
+.event-list-panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;position:sticky;top:74px;max-height:calc(100vh - 94px)}
+.event-search{padding:10px;border-bottom:1px solid var(--border)}
+.event-search input{width:100%;background:var(--bg4);border:1px solid var(--border2);color:var(--text);font-family:var(--mono);font-size:12px;padding:7px 10px;border-radius:var(--r);outline:none}
+.event-search input:focus{border-color:var(--accent)}
+.event-list-items{overflow-y:auto;max-height:calc(100vh - 170px)}
+.event-item{padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .1s}
+.event-item:last-child{border-bottom:none}
+.event-item:hover{background:var(--bg3)}
+.event-item.active{background:var(--accent-dim);border-left:2px solid var(--accent)}
+.ev-code{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent2)}
+.ev-count{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:2px}
+.match-row{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);margin-bottom:5px;overflow:hidden;display:grid;grid-template-columns:32px 1fr auto auto 36px;align-items:stretch;font-family:var(--mono)}
+.mr-num{font-size:10px;color:var(--text3);padding:10px 8px;border-right:1px solid var(--border);display:flex;align-items:center;justify-content:center}
+.mr-alliances{padding:8px 12px;display:flex;flex-direction:column;gap:4px;flex:1}
+.mr-alliance{display:flex;align-items:center;gap:6px}
+.mr-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.mr-dot.red{background:var(--red)}.mr-dot.blue{background:var(--accent)}
+.mr-teams{font-size:11px;flex:1;color:var(--text2)}
+.status-badge{font-size:9px;padding:1px 6px;border-radius:3px;font-weight:500}
+.badge-played{background:var(--green-dim);color:var(--green);border:1px solid rgba(34,197,94,.2)}
+.badge-pending{background:var(--yellow-dim);color:var(--yellow);border:1px solid rgba(245,158,11,.2)}
+.mr-pred{padding:8px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-left:1px solid var(--border);min-width:78px;gap:1px}
+.mr-pred-lbl{font-size:8px;color:var(--text3);letter-spacing:.06em;text-transform:uppercase}
+.mr-pred-val{font-size:12px;font-weight:700}
+.mr-wbar{height:3px;border-radius:2px;display:flex;overflow:hidden;width:100%;margin:1px 0}
+.mr-wbar .wr{background:var(--red)}.mr-wbar .wb{background:var(--accent)}
+.mr-result{padding:8px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-left:1px solid var(--border);min-width:84px;gap:1px}
+.mr-result-lbl{font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em}
+.mr-score-val{font-size:13px;font-weight:700}
+.mr-check{padding:0 8px;display:flex;align-items:center;justify-content:center;border-left:1px solid var(--border)}
+.check-ok{color:var(--green);font-size:13px}
+.check-no{color:var(--red);font-size:13px}
+.check-tbd{color:var(--text3);font-size:13px}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--border2)}
+@media(max-width:680px){.nav-bar{overflow-x:auto}.content{padding:16px 14px}}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <header class="header">
+    <div class="logo-wrap">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 4h2v12H3V4zm4 4h2v8H7V8zm4-2h2v10h-2V6zm4 4h2v6h-2v-6z"/></svg>
+      </div>
+      <div>
+        <div class="logo-mark">FTC EPA</div>
+        <div class="logo-sub">DECODE 2025–26</div>
+      </div>
+    </div>
+    <div class="header-div"></div>
+    <div class="season-badge">Season 2025</div>
+    <div class="header-right">
+      <select class="season-select" id="season-select" onchange="loadData(false,+this.value)" title="Switch season">
+        <option value="2025">2025–26 Decode</option>
+        <option value="2024">2024–25 Into the Deep</option>
+        <option value="2023">2023–24 Centerstage</option>
+        <option value="2022">2022–23 PowerPlay</option>
+      </select>
+      <div class="live-indicator">
+        <div class="live-dot" id="ldot"></div>
+        <span id="live-status">offline</span>
+      </div>
+      <button class="theme-btn" onclick="loadData(true)" title="Force Refresh">🔄</button>
+      <button class="theme-btn" onclick="(function(){if(promptCredentials())loadData(true);})()" title="Set API credentials">🔑</button>
+      <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+    </div>
+  </header>
+
+  <nav class="nav-bar">
+    <button class="nav-item active" onclick="showTab('rankings')" id="nav-rankings">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12h2V6H2v6zm4 0h2V2H6v10zm4 0h2V8h-2v4z"/></svg>
+      Rankings
+    </button>
+    <button class="nav-item" onclick="showTab('predictor')" id="nav-predictor">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/></svg>
+      Predictor
+    </button>
+    <button class="nav-item" onclick="showTab('live')" id="nav-live">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8a5 5 0 0 1 10 0M5.5 8a2.5 2.5 0 0 1 5 0"/><circle cx="8" cy="8" r="1" fill="currentColor" stroke="none"/></svg>
+      Live Match
+    </button>
+    <button class="nav-item" onclick="showTab('team')" id="nav-team">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-5 6-5s6 1.7 6 5"/></svg>
+      Team
+    </button>
+    <button class="nav-item" onclick="showTab('event')" id="nav-event">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="11" rx="2"/><path d="M5 2v2m6-2v2M2 7h12"/></svg>
+      Events
+    </button>
+    <button class="nav-item" onclick="showTab('predrank')" id="nav-predrank">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2L2 14h12L8 2z"/></svg>
+      Pred. Rankings
+    </button>
+  </nav>
+
+  <div class="main">
+    <div class="content">
+      <div id="tab-rankings">
+        <div class="loading-wrap">
+          <div class="spinner"></div>
+          <div class="load-msg" id="load-msg">Connecting to FTC Events API…</div>
+          <div class="progress-bar"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+        </div>
+      </div>
+      <div id="tab-predictor"  style="display:none"></div>
+      <div id="tab-live"       style="display:none"></div>
+      <div id="tab-team"       style="display:none"></div>
+      <div id="tab-event"      style="display:none"></div>
+      <div id="tab-predrank"   style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// THEME
+// ═══════════════════════════════════════════════════════════
+const savedTheme = localStorage.getItem('theme') || 'light';
+document.documentElement.setAttribute('data-theme', savedTheme);
+function toggleTheme(){
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+}
+
+// ═══════════════════════════════════════════════════════════
+// CONSTANTS
+// ═══════════════════════════════════════════════════════════
+const SEASONS_AVAILABLE = [2025, 2024, 2023, 2022];
+let TARGET_SEASON  = parseInt(localStorage.getItem('ftc_season')||'2025');
+
+(function(){
+  const sel = document.getElementById('season-select');
+  if(sel) sel.value = String(TARGET_SEASON);
+  const badge = document.querySelector('.season-badge');
+  if(badge) badge.textContent = `Season ${TARGET_SEASON}`;
+  const logoSub = document.querySelector('.logo-sub');
+  if(logoSub){
+    const names = {2025:'DECODE 2025–26',2024:'INTO THE DEEP 2024–25',2023:'CENTERSTAGE 2023–24',2022:'POWERPLAY 2022–23'};
+    logoSub.textContent = names[TARGET_SEASON]||`SEASON ${TARGET_SEASON}`;
+  }
+})();
+
+const FTC_API_BASE   = 'https://ftc-api.firstinspires.org/v2.0';
+const CORS_PROXY = 'https://ftc-proxy.quintero.workers.dev/';
+const OFFSEASON_SFX  = ['OS','KO','SCRIMMAGE','DEMO','EXHIBITION'];
+const OFFSEASON_TYPES= ['offseason','kickoff','demonstration','workshop'];
+
+let FTC_API_USER = localStorage.getItem('ftc_api_user') || '';
+let FTC_API_KEY  = localStorage.getItem('ftc_api_key')  || '';
+
+function ftcAuthHeader(){
+  return 'Basic ' + btoa(FTC_API_USER + ':' + FTC_API_KEY);
+}
+
+function promptCredentials(){
+  const user = prompt('FTC Events API username (from firstinspires.org):', FTC_API_USER);
+  if(user === null) return false;
+  const key  = prompt('FTC Events API key (from firstinspires.org):', FTC_API_KEY);
+  if(key === null) return false;
+  FTC_API_USER = user.trim();
+  FTC_API_KEY  = key.trim();
+  localStorage.setItem('ftc_api_user', FTC_API_USER);
+  localStorage.setItem('ftc_api_key',  FTC_API_KEY);
+  return true;
+}
+
+async function ftcFetch(path){
+  if(!FTC_API_USER || !FTC_API_KEY){
+    if(!promptCredentials()) throw new Error('No API credentials provided');
+  }
+  let r;
+  try{
+    r = await fetch(CORS_PROXY + path.replace(/^\//, ''), {
+      headers:{
+        'Authorization': ftcAuthHeader(),
+        'Accept': 'application/json',
+      }
+    });
+  } catch(e){
+    throw new Error('Network error (proxy unreachable): ' + e.message);
+  }
+  if(r.status === 401){
+    localStorage.removeItem('ftc_api_user');
+    localStorage.removeItem('ftc_api_key');
+    FTC_API_USER = ''; FTC_API_KEY = '';
+    if(!promptCredentials()) throw new Error('Unauthorized: bad credentials');
+    return ftcFetch(path);
+  }
+  if(r.status === 429){
+    await new Promise(res => setTimeout(res, 2000));
+    return ftcFetch(path);
+  }
+  if(!r.ok) throw new Error('HTTP ' + r.status + ' for ' + path);
+  return r.json();
+}
+
+// ═══════════════════════════════════════════════════════════
+// EPA PARAMETERS
+// ═══════════════════════════════════════════════════════════
+const K_RAMP_START  = 2;
+const K_RAMP_END    = 6;
+const K_PEAK_VAL    = 0.50;
+const K_PLATEAU_END = 14;  // peak lasts through ~2 events worth of matches
+const K_FLOOR       = 0.12; // low floor so EPA converges — experienced teams stabilize
+
+const ERROR_CLIP  = 6;
+const AUTO_PRIOR_FRAC = 0.22;
+
+const REGION_EARLY_EVENTS = 3;
+const REGION_FALLBACK_FRAC = 0.92;
+const GLOBAL_FALLBACK_FRAC = 0.88;
+const WIN_PROB_SCALE = 1.8;
+
+const PATTERN_PRIOR_FRAC = 0.12;
+const PARK_PRIOR_FRAC    = 0.05;
+const PENALTY_PRIOR_FRAC = 0.08;
+const EPA_INFLATE = 1.0;
+
+const AUTO_STABILITY_WINDOW = 8;
+const AUTO_STABILITY_FLOOR  = 0.60;
+
+// ── NEW: Momentum EPA parameters ──────────────────────────────────────────────
+// How many recent matches to weight more heavily for prediction
+// (but NOT for final EPA display — EPA still uses all matches)
+const MOMENTUM_WINDOW    = 6;   // last N matches for momentum calculation
+const MOMENTUM_WEIGHT    = 0.35; // blend: 0.35 * momentum_epa + 0.65 * full_epa
+
+// ── NEW: Opponent-strength correction ─────────────────────────────────────────
+// Teams with high/low average opponent EPA get their prediction EPA adjusted
+const OPP_STRENGTH_WEIGHT = 0.08; // used only in win probability prediction, not in EPA itself
+
+// ── NEW: Better calibrated Elo scale ──────────────────────────────────────────
+// Instead of fixed seasonAvg*1.8, use actual score margin distribution
+// We compute the MAD (median absolute margin) from played matches and use that
+// Elo logistic: P(red wins) = 1 / (1 + 10^(d / elo_scale))
+// Where elo_scale = f(score margin spread). Higher spread → harder to be sure.
+const ELO_SCALE_MULTIPLIER = 1.6;  // slightly tighter than original 1.8
+
+// ── NEW: Min prediction matches (raised) ──────────────────────────────────────
+const MIN_MATCHES_FOR_PRED = 3;   // was 2 — require a bit more data before trusting EPA
+const EPA_TRUST_RAMP_END   = 8;   // was 6 — longer ramp to full trust
+
+function getCacheKey(season){ return `ftc_decode_matches_v17_${season}`; }
+function getCacheTimeKey(season){ return `ftc_decode_matches_time_v17_${season}`; }
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+const ST = {
+  loaded:false, loading:false, _cancelLoad:false,
+  rows:[], ratings:{}, autoRatings:{}, dcRatings:{},
+  patternRatings:{}, parkRatings:{}, penaltyRatings:{},
+  matchCounts:{}, seasonAvg:30,
+  initialEpas:{}, preEventEpas:{},
+  regionEarlyAvg:{}, teamRegion:{}, fallback:15,
+  seasonAccuracy:null,
+  autoStability:{},
+  autoHistory:{},
+  // NEW: momentum & schedule-strength state
+  momentumEpa:{},          // team -> epa from last MOMENTUM_WINDOW matches only
+  scheduleStrength:{},     // team -> avg opponent EPA faced
+  eloScale:48,             // calibrated from actual score margins
+  sortCol:'epa', sortDir:-1, search:'', tierFilter:'',
+  predRed:['',''], predBlue:['',''],
+  currentTab:'rankings',
+  totalEvents:0, loadedEvents:0,
+  eventData:null, predRankEvent:'',
+};
+const LV = {redTeams:['',''],blueTeams:['',''],redScore:0,blueScore:0,redAuto:0,blueAuto:0,redFoul:0,blueFoul:0,applied:false};
+let teamSearchVal = '';
+let evSearch = '';
+const TEAM_NAMES = {};
+
+// ═══════════════════════════════════════════════════════════
+// REGION UTILITIES
+// ═══════════════════════════════════════════════════════════
+function extractRegion(code) {
+  if (!code || code.length < 2) return 'OTHER';
+  const u = code.toUpperCase();
+  const p2 = u.slice(0, 2);
+  if (p2 === 'US' || p2 === 'CA') return u.slice(0, 4);
+  if (u.startsWith('FTCCMP') || u.startsWith('USACMP')) return 'CMP';
+  return p2;
+}
+
+function buildRegionalPriors(rows) {
+  const eventRegion = {};
+  const eventFirstTime = {};
+
+  for (const r of rows) {
+    const ev = (r.event || '').toUpperCase();
+    if (!ev || ev === 'LIVE' || ev === 'DIRECT') continue;
+    if (!eventRegion[ev]) eventRegion[ev] = extractRegion(ev);
+    const t = r.mt || '';
+    if (t && (!eventFirstTime[ev] || t < eventFirstTime[ev])) eventFirstTime[ev] = t;
+  }
+
+  const regionEvents = {};
+  for (const [ev, region] of Object.entries(eventRegion)) {
+    if (region === 'CMP') continue;
+    if (!regionEvents[region]) regionEvents[region] = [];
+    regionEvents[region].push(ev);
+  }
+  for (const region of Object.keys(regionEvents)) {
+    regionEvents[region].sort((a, b) => {
+      const ta = eventFirstTime[a] || 'z', tb = eventFirstTime[b] || 'z';
+      return ta.localeCompare(tb);
+    });
+  }
+
+  const regionEarlyAvg = {};
+  for (const [region, events] of Object.entries(regionEvents)) {
+    const earlyEvents = new Set(events.slice(0, REGION_EARLY_EVENTS));
+    const perRobot = [];
+    for (const r of rows) {
+      const ev = (r.event || '').toUpperCase();
+      if (!earlyEvents.has(ev)) continue;
+      if ((r.level || 'qual') !== 'qual' && r.level !== '' && r.level !== 'qualification') continue;
+      if (r.rt && r.rt.length) perRobot.push(r.rs / r.rt.length);
+      if (r.bt && r.bt.length) perRobot.push(r.bs / r.bt.length);
+    }
+    if (perRobot.length >= 4) regionEarlyAvg[region] = mean(perRobot);
+  }
+
+  const teamFirstEvent = {};
+  const teamFirstTime  = {};
+  for (const r of rows) {
+    const ev = (r.event || '').toUpperCase();
+    if (!ev || ev === 'LIVE') continue;
+    const t = r.mt || '';
+    for (const team of [...(r.rt || []), ...(r.bt || [])]) {
+      if (!teamFirstTime[team] || (t && t < teamFirstTime[team])) {
+        teamFirstTime[team] = t;
+        teamFirstEvent[team] = ev;
+      }
+    }
+  }
+
+  const teamRegion = {};
+  for (const [team, ev] of Object.entries(teamFirstEvent)) teamRegion[team] = extractRegion(ev);
+
+  return { regionEarlyAvg, teamRegion };
+}
+
+function regionalFallback(team, seasonAvg) {
+  const region = ST.teamRegion[team];
+  if (region && ST.regionEarlyAvg[region]) return ST.regionEarlyAvg[region] * REGION_FALLBACK_FRAC;
+  return seasonAvg * GLOBAL_FALLBACK_FRAC;
+}
+
+// ═══════════════════════════════════════════════════════════
+// MATH UTILITIES
+// ═══════════════════════════════════════════════════════════
+function kFactor(n){
+  if(n <= K_RAMP_START)  return K_FLOOR;
+  if(n <= K_RAMP_END)    return K_FLOOR + (K_PEAK_VAL - K_FLOOR) * (n - K_RAMP_START) / (K_RAMP_END - K_RAMP_START);
+  if(n <= K_PLATEAU_END) return K_PEAK_VAL;
+  return Math.max(K_FLOOR, K_PEAK_VAL - (1/20) * (n - K_PLATEAU_END));
+}
+
+function mFactor(){ return 0; } // EPA is pure score decomposition — opponent quality does not affect EPA
+function clip(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+function mean(arr){ return arr.length ? arr.reduce((a,b) => a+b, 0) / arr.length : 0; }
+function median(arr){ if(!arr.length) return 0; const s=[...arr].sort((a,b)=>a-b); return s[Math.floor(s.length/2)]; }
+function variance(arr){ if(arr.length < 2) return 0; const m = mean(arr); return mean(arr.map(x => (x-m)**2)); }
+function toU(epa, avg){ return avg ? epa / avg : 0; }
+
+function computeAutoStability(history){
+  if(!history || history.length < 3) return 1.0;
+  const m = mean(history);
+  if(m < 0.5) return 1.0;
+  const sd = Math.sqrt(variance(history));
+  const cv = sd / m;
+  return Math.max(AUTO_STABILITY_FLOOR, 1 - cv * (1 - AUTO_STABILITY_FLOOR));
+}
+
+function uepaLabel(u){
+  if(u >= 2.0) return 'Elite';
+  if(u >= 1.5) return 'Strong';
+  if(u >= 1.1) return 'Above Avg';
+  if(u >= 0.9) return 'Average';
+  if(u >= 0.6) return 'Below Avg';
+  return 'Developing';
+}
+function tierCls(lbl){
+  return {Elite:'t-elite',Strong:'t-strong','Above Avg':'t-above',Average:'t-average','Below Avg':'t-below',Developing:'t-develop'}[lbl]||'t-average';
+}
+function trendH(v){
+  const s = Math.abs(v).toFixed(1);
+  if(v > 0.05)  return `<span class="trend-up">▲ +${s}</span>`;
+  if(v < -0.05) return `<span class="trend-dn">▼ −${s}</span>`;
+  return `<span class="trend-flat">— ${s}</span>`;
+}
+
+function epaUpdate(k, m, scoreShare, myEpa, oppShare, oppEpa){
+  const delta = k * (1 / (1 + m)) * ((scoreShare - myEpa) - m * (oppShare - oppEpa));
+  return clip(delta, -ERROR_CLIP, ERROR_CLIP);
+}
+
+// ═══════════════════════════════════════════════════════════
+// IMPROVED WIN PROBABILITY
+// ═══════════════════════════════════════════════════════════
+// Key improvements:
+// 1. Uses prediction EPA (momentum-blended, shrinkage-adjusted) not raw EPA
+// 2. Auto stability applied more precisely
+// 3. Elo scale calibrated from actual score spread, not fixed multiplier
+// 4. Schedule-strength correction: small nudge for teams with unusually easy/hard schedules
+
+function predictionEpa(team, epaMap, seasonAvg) {
+  const rawEpa = epaMap[team] ?? regionalFallback(team, seasonAvg);
+  const momEpa = ST.momentumEpa[team];
+  // Blend momentum (recent form) with full-season EPA
+  if(momEpa !== undefined && ST.matchCounts[team] >= MOMENTUM_WINDOW) {
+    return rawEpa * (1 - MOMENTUM_WEIGHT) + momEpa * MOMENTUM_WEIGHT;
+  }
+  return rawEpa;
+}
+
+function scheduleAdjustedEpa(team, baseEpa, seasonAvg) {
+  // If a team has faced unusually weak/strong opponents, nudge their prediction EPA
+  // This corrects for inflated/deflated EPAs from schedule bias
+  const schedStrength = ST.scheduleStrength[team];
+  if(schedStrength === undefined) return baseEpa;
+  const diff = schedStrength - seasonAvg; // positive = faced stronger opponents
+  // Small positive adjustment for teams that earned their EPA against tough opponents
+  return baseEpa + diff * OPP_STRENGTH_WEIGHT;
+}
+
+function epaWinProb(redTeams, blueTeams, epaMap, seasonAvg, penaltyMap, stabilityMap) {
+  penaltyMap  = penaltyMap  || {};
+  stabilityMap = stabilityMap || {};
+  const penFb = seasonAvg * PENALTY_PRIOR_FRAC;
+
+  const teamScore = (t) => {
+    // Step 1: get base prediction EPA (momentum-blended)
+    let epa = predictionEpa(t, epaMap, seasonAvg);
+    // Step 2: schedule-strength correction
+    epa = scheduleAdjustedEpa(t, epa, seasonAvg);
+    epa = Math.max(0, epa);
+
+    const pen = penaltyMap[t] ?? penFb;
+
+    // Step 3: auto stability — unstable auto teams get their auto portion
+    // regressed toward the mean; the rest stays
+    const aepa = ST.autoRatings[t] ?? epa * AUTO_PRIOR_FRAC;
+    const stability = (stabilityMap && stabilityMap[t]) ?? 1.0;
+    const effectiveAuto = aepa * stability + (epa * AUTO_PRIOR_FRAC) * (1 - stability);
+    const dcEpa = Math.max(0, epa - aepa);
+    return Math.max(0, effectiveAuto + dcEpa) + pen;
+  };
+
+  const rSum = redTeams.reduce((s, t) => s + teamScore(t), 0);
+  const bSum = blueTeams.reduce((s, t) => s + teamScore(t), 0);
+
+  // Use calibrated Elo scale (derived from actual score margin distribution)
+  const eloScale = Math.max(ST.eloScale || seasonAvg * ELO_SCALE_MULTIPLIER, 1);
+  const d = (bSum - rSum) * (400 / eloScale);
+  return Math.max(0.05, Math.min(0.95, 1 / (1 + Math.pow(10, d / 400))));
+}
+
+// ═══════════════════════════════════════════════════════════
+// BUILD EPA — chronological predict-then-update
+// ═══════════════════════════════════════════════════════════
+function buildEpa(rows){
+  const ratings = {}, autoR = {}, dcR = {}, mc = {};
+  const patR = {}, parkR = {}, penR = {};
+  const autoHistory = {};
+  const chronoSnapshots = [];
+
+  // NEW: track recent match history per team for momentum EPA
+  const recentMatchScores = {};  // team -> [{share, matchTime}] last MOMENTUM_WINDOW
+  // NEW: track opponents faced for schedule strength
+  const opponentHistory = {};    // team -> [opponent EPAs]
+
+  const perRobot = [];
+  for(const r of rows){
+    if(r.rt && r.rt.length) perRobot.push(r.rs / r.rt.length);
+    if(r.bt && r.bt.length) perRobot.push(r.bs / r.bt.length);
+  }
+  const seasonAvg = perRobot.length ? mean(perRobot) : 30;
+
+  // ── NEW: calibrate Elo scale from actual score margins ───────────────────
+  const margins = [];
+  for(const r of rows){
+    if(r.rtot !== undefined && r.btot !== undefined && r.rtot !== r.btot){
+      margins.push(Math.abs(r.rtot - r.btot));
+    }
+  }
+  // Use 75th percentile of margin distribution as Elo scale
+  // This means a team that's one "typical winning margin" better than opponents
+  // gets roughly 73% win probability — well-calibrated for FTC
+  const eloScale = margins.length > 10
+    ? [...margins].sort((a,b)=>a-b)[Math.floor(margins.length * 0.65)]
+    : seasonAvg * ELO_SCALE_MULTIPLIER;
+
+  const { regionEarlyAvg, teamRegion } = buildRegionalPriors(rows);
+
+  const initEpa = (team) => {
+    const region = teamRegion[team];
+    if (region && regionEarlyAvg[region]) return regionEarlyAvg[region] * REGION_FALLBACK_FRAC;
+    return seasonAvg * GLOBAL_FALLBACK_FRAC;
+  };
+
+  const allTeams = new Set();
+  for(const r of rows) [...(r.rt||[]),...(r.bt||[])].forEach(t => allTeams.add(t));
+  for(const t of allTeams){
+    const init = initEpa(t);
+    ratings[t] = init;
+    autoR[t]   = init * AUTO_PRIOR_FRAC;
+    patR[t]    = init * PATTERN_PRIOR_FRAC;
+    parkR[t]   = init * PARK_PRIOR_FRAC;
+    penR[t]    = init * PENALTY_PRIOR_FRAC;
+    mc[t]      = 0;
+    autoHistory[t]      = [];
+    recentMatchScores[t] = [];
+    opponentHistory[t]   = [];
+  }
+
+  // Per-event match counter: resets at each new event so experienced teams
+  // regain full K responsiveness when entering a fresh event
+  const mcEvent = {};       // team -> matches played at current event
+  const teamCurEvent = {};  // team -> current event code
+
+  const preEventEpas = {};
+  const seenAtEvent  = new Set();
+
+  const sorted = [...rows].sort((a,b) => (a.mt||'').localeCompare(b.mt||''));
+  let globalN = 0;
+
+  for(const row of sorted){
+    const {rt:red, bt:blue} = row;
+    if(!red || !blue || !red.length || !blue.length) continue;
+
+    const ev = (row.event || '').toUpperCase();
+    if(ev && ev !== 'LIVE'){
+      if(!preEventEpas[ev]) preEventEpas[ev] = {};
+      for(const t of [...red,...blue]){
+        if(!seenAtEvent.has(`${ev}_${t}`)){
+          seenAtEvent.add(`${ev}_${t}`);
+          preEventEpas[ev][t] = ratings[t] ?? initEpa(t);
+          // Reset per-event counter so team gets full K responsiveness at this event
+          if(teamCurEvent[t] !== ev){ teamCurEvent[t] = ev; mcEvent[t] = 0; }
+        }
+      }
+    }
+
+    if(row.rtot !== undefined && row.rtot !== null && row.rtot !== row.btot){
+      const snap = {}, penSnap = {}, mcSnap = {};
+      for(const t of [...red,...blue]){
+        snap[t]    = ratings[t] ?? initEpa(t);
+        penSnap[t] = penR[t] ?? initEpa(t) * PENALTY_PRIOR_FRAC;
+        mcSnap[t]  = mc[t] || 0;
+      }
+      chronoSnapshots.push({row, snap, penSnap, mcSnap});
+    }
+
+    if(row.rtot == null || row.btot == null || row.rtot === row.btot){
+      for(const t of [...red,...blue]) mc[t] = (mc[t]||0) + 1;
+      globalN += 1;
+      continue;
+    }
+
+    const nr = red.length, nb = blue.length;
+    const rShare = row.rs/nr, bShare = row.bs/nb;
+
+    const rTotalAuto = row.ra || 0;
+    const bTotalAuto = row.ba || 0;
+
+    // Auto score: equal split per robot (Statbotics approach — no per-robot breakdown available)
+    const rAutoShares = red.map(() => rTotalAuto / nr);
+    const bAutoShares = blue.map(() => bTotalAuto / nb);
+
+    const rPatShare  = (row.rPatPts  ?? 0) / nr;
+    const bPatShare  = (row.bPatPts  ?? 0) / nb;
+    const rParkShare = (row.rParkPts ?? 0) / nr;
+    const bParkShare = (row.bParkPts ?? 0) / nb;
+    const rPenShare = (row.bf ?? 0) / nr;
+    const bPenShare = (row.rf ?? 0) / nb;
+
+    const rEA = mean(red.map(t => ratings[t]  ?? initEpa(t)));
+    const bEA = mean(blue.map(t => ratings[t] ?? initEpa(t)));
+    const m   = mFactor();
+
+    // ── NEW: Record opponent schedule strength BEFORE updating EPAs ──────────
+    for(const t of red){
+      if(!opponentHistory[t]) opponentHistory[t] = [];
+      const oppAvgEpa = mean(blue.map(tt => ratings[tt] ?? initEpa(tt)));
+      opponentHistory[t].push(oppAvgEpa);
+    }
+    for(const t of blue){
+      if(!opponentHistory[t]) opponentHistory[t] = [];
+      const oppAvgEpa = mean(red.map(tt => ratings[tt] ?? initEpa(tt)));
+      opponentHistory[t].push(oppAvgEpa);
+    }
+
+    // Main EPA updates — Statbotics style: K based on global match count so EPA converges
+    for(const t of red){
+      const k = kFactor(mc[t]||0);
+      const myEpa = ratings[t] ?? initEpa(t);
+      ratings[t] = myEpa + epaUpdate(k, m, rShare, myEpa, bShare, bEA);
+    }
+    for(const t of blue){
+      const k = kFactor(mc[t]||0);
+      const myEpa = ratings[t] ?? initEpa(t);
+      ratings[t] = myEpa + epaUpdate(k, m, bShare, myEpa, rShare, rEA);
+    }
+
+    // ── NEW: Track recent scores for momentum EPA ────────────────────────────
+    for(let i = 0; i < red.length; i++){
+      const t = red[i];
+      if(!recentMatchScores[t]) recentMatchScores[t] = [];
+      recentMatchScores[t].push(rShare);
+      if(recentMatchScores[t].length > MOMENTUM_WINDOW) recentMatchScores[t].shift();
+    }
+    for(let i = 0; i < blue.length; i++){
+      const t = blue[i];
+      if(!recentMatchScores[t]) recentMatchScores[t] = [];
+      recentMatchScores[t].push(bShare);
+      if(recentMatchScores[t].length > MOMENTUM_WINDOW) recentMatchScores[t].shift();
+    }
+
+    // Auto sub-EPA updates — global mc for K, individual auto EPA as baseline
+    for(let i = 0; i < red.length; i++){
+      const t = red[i];
+      const k = kFactor(mc[t]||0);
+      const aShare = rAutoShares[i];
+      const myAutoEpa = autoR[t] ?? initEpa(t) * AUTO_PRIOR_FRAC;
+      const d = k * clip(aShare - myAutoEpa, -ERROR_CLIP, ERROR_CLIP);
+      autoR[t] = Math.min((autoR[t]??0) + d, ratings[t]);
+      if(!autoHistory[t]) autoHistory[t] = [];
+      autoHistory[t].push(aShare);
+      if(autoHistory[t].length > AUTO_STABILITY_WINDOW) autoHistory[t].shift();
+    }
+    for(let i = 0; i < blue.length; i++){
+      const t = blue[i];
+      const k = kFactor(mc[t]||0);
+      const aShare = bAutoShares[i];
+      const myAutoEpa = autoR[t] ?? initEpa(t) * AUTO_PRIOR_FRAC;
+      const d = k * clip(aShare - myAutoEpa, -ERROR_CLIP, ERROR_CLIP);
+      autoR[t] = Math.min((autoR[t]??0) + d, ratings[t]);
+      if(!autoHistory[t]) autoHistory[t] = [];
+      autoHistory[t].push(aShare);
+      if(autoHistory[t].length > AUTO_STABILITY_WINDOW) autoHistory[t].shift();
+    }
+
+    // (pat/park/pen averages removed — each team now updates against their own baseline)
+
+    for(const t of red){
+      const k = kFactor(mc[t]||0);
+      if(rPatShare > 0 || (row.rPatPts !== undefined)){
+        patR[t] = Math.max(0, (patR[t]??0) + k * clip(rPatShare - (patR[t]??0), -ERROR_CLIP, ERROR_CLIP));
+      }
+      if(rParkShare > 0 || (row.rParkPts !== undefined)){
+        parkR[t] = Math.max(0, (parkR[t]??0) + k * clip(rParkShare - (parkR[t]??0), -ERROR_CLIP, ERROR_CLIP));
+      }
+      penR[t] = Math.max(0, (penR[t]??0) + k * clip(rPenShare - (penR[t]??0), -ERROR_CLIP, ERROR_CLIP));
+    }
+    for(const t of blue){
+      const k = kFactor(mc[t]||0);
+      if(bPatShare > 0 || (row.bPatPts !== undefined)){
+        patR[t] = Math.max(0, (patR[t]??0) + k * clip(bPatShare - (patR[t]??0), -ERROR_CLIP, ERROR_CLIP));
+      }
+      if(bParkShare > 0 || (row.bParkPts !== undefined)){
+        parkR[t] = Math.max(0, (parkR[t]??0) + k * clip(bParkShare - (parkR[t]??0), -ERROR_CLIP, ERROR_CLIP));
+      }
+      penR[t] = Math.max(0, (penR[t]??0) + k * clip(bPenShare - (penR[t]??0), -ERROR_CLIP, ERROR_CLIP));
+    }
+
+    for(const t of [...red,...blue]){
+      dcR[t] = (ratings[t]||0) - (autoR[t]||0);
+      mc[t]  = (mc[t]||0) + 1;
+      mcEvent[t] = (mcEvent[t]||0) + 1;
+    }
+    globalN += 1;
+  }
+
+  // ── NEW: Compute momentum EPA for each team ──────────────────────────────
+  // Momentum EPA = mean of last MOMENTUM_WINDOW per-robot score shares
+  const momentumEpa = {};
+  for(const t of allTeams){
+    const recent = recentMatchScores[t] || [];
+    if(recent.length >= 2){
+      // Weight more recent matches higher within the window
+      let weightedSum = 0, weightTotal = 0;
+      for(let i = 0; i < recent.length; i++){
+        const w = i + 1; // later = higher index = higher weight
+        weightedSum  += recent[i] * w;
+        weightTotal  += w;
+      }
+      momentumEpa[t] = weightTotal > 0 ? weightedSum / weightTotal : ratings[t];
+    } else {
+      momentumEpa[t] = ratings[t]; // not enough data — use full EPA
+    }
+  }
+
+  // ── NEW: Compute schedule strength per team ──────────────────────────────
+  const scheduleStrength = {};
+  for(const t of allTeams){
+    const hist = opponentHistory[t] || [];
+    if(hist.length >= 2) scheduleStrength[t] = mean(hist);
+  }
+
+  // Compute auto stability scores from history
+  const autoStability = {};
+  for(const t of allTeams) autoStability[t] = computeAutoStability(autoHistory[t]);
+
+  const initialEpas = {};
+  for(const t of allTeams) initialEpas[t] = initEpa(t);
+  const fallback = seasonAvg * GLOBAL_FALLBACK_FRAC;
+
+  return {ratings, autoRatings:autoR, dcRatings:dcR, patternRatings:patR, parkRatings:parkR, penaltyRatings:penR,
+          matchCounts:mc, seasonAvg, initialEpas, preEventEpas, chronoSnapshots, fallback,
+          regionEarlyAvg, teamRegion, autoStability, autoHistory,
+          momentumEpa, scheduleStrength, eloScale};
+}
+
+function getStats(team){
+  const epa = ST.ratings[team];
+  if(epa === undefined || epa === null) return null;
+  const aepa = ST.autoRatings[team] ?? epa * AUTO_PRIOR_FRAC;
+  const dc   = ST.dcRatings[team]   ?? epa - aepa;
+  const init = ST.initialEpas[team] ?? ST.fallback;
+  const u    = toU(epa, ST.seasonAvg);
+  const stability = ST.autoStability[team] ?? 1.0;
+  return {team, epa, auto_epa:aepa, teleop_epa:dc, uepa:u, uepa_label:uepaLabel(u),
+          matches:ST.matchCounts[team]||0, trend:epa-init, auto_stability:stability};
+}
+
+// ═══════════════════════════════════════════════════════════
+// SEASON ACCURACY — uses improved prediction EPA
+// ═══════════════════════════════════════════════════════════
+function shrinkEpa(epa, matchCount, fallback) {
+  if (matchCount >= EPA_TRUST_RAMP_END) return epa;
+  if (matchCount < MIN_MATCHES_FOR_PRED) return fallback;
+  const trust = (matchCount - MIN_MATCHES_FOR_PRED) / (EPA_TRUST_RAMP_END - MIN_MATCHES_FOR_PRED);
+  return trust * epa + (1 - trust) * fallback;
+}
+
+function shrunkEpaMap(snap, mcSnap, seasonAvg) {
+  const out = {};
+  for (const [t, epa] of Object.entries(snap)) {
+    const n = mcSnap[t] || 0;
+    const fb = regionalFallback(+t, seasonAvg);
+    out[t] = shrinkEpa(epa, n, fb);
+  }
+  return out;
+}
+
+function computeSeasonAccuracy(chronoSnapshots){
+  let correct = 0, total = 0;
+  for(const {row, snap, penSnap, mcSnap} of chronoSnapshots){
+    if(row.rtot === undefined || row.rtot === null || row.rtot === row.btot) continue;
+
+    const allTeams = [...row.rt, ...row.bt];
+    const minMc = Math.min(...allTeams.map(t => (mcSnap && mcSnap[t]) || 0));
+    if (minMc < MIN_MATCHES_FOR_PRED) continue;
+
+    const shrunkSnap = mcSnap ? shrunkEpaMap(snap, mcSnap, ST.seasonAvg) : snap;
+
+    // Use improved win prob (momentum + schedule-strength correction)
+    const rwp = epaWinProb(row.rt, row.bt, shrunkSnap, ST.seasonAvg, penSnap || {}, ST.autoStability || {});
+    const pred = rwp > 0.5 ? 'red' : 'blue';
+    const actual = row.rtot > row.btot ? 'red' : 'blue';
+    if(pred === actual) correct++;
+    total++;
+  }
+  return total > 0 ? {correct, total, pct:Math.round(correct/total*100)} : null;
+}
+
+// ═══════════════════════════════════════════════════════════
+// API / FETCH (unchanged from original)
+// ═══════════════════════════════════════════════════════════
+const isOffseason = (code, type='') => {
+  const u = (code||'').toUpperCase();
+  return OFFSEASON_SFX.some(s => u.endsWith(s)) || OFFSEASON_TYPES.includes((type||'').toLowerCase());
+};
+
+const _dbgLines = [];
+function dbg(msg, isErr=false){
+  console[isErr?'error':'log']('[FTC]', msg);
+  _dbgLines.push(`<span style="color:${isErr?'#f87171':'#94a3b8'}">${msg}</span>`);
+  const el = document.getElementById('_dbg');
+  if(el) el.innerHTML = _dbgLines.slice(-18).join('<br>');
+}
+
+function parseMatchRow(season, m, scoreDetail, eventCode){
+  try{
+    const code = (eventCode || '').toUpperCase();
+    if(!code || isOffseason(code)) return null;
+    if(m.scoreRedFinal == null || m.scoreBlueFinal == null) return null;
+
+    const teams = m.teams || [];
+    const rt = teams.filter(t => (t.station||'').startsWith('Red')  && !t.surrogate && !t.noShow).map(t => t.teamNumber);
+    const bt = teams.filter(t => (t.station||'').startsWith('Blue') && !t.surrogate && !t.noShow).map(t => t.teamNumber);
+    if(!rt.length || !bt.length) return null;
+
+    const redT = +(m.scoreRedFinal||0);
+    const bluT = +(m.scoreBlueFinal||0);
+    const redF = +(m.scoreRedFoul||0);
+    const bluF = +(m.scoreBlueFoul||0);
+    const redA = +(m.scoreRedAuto||0);
+    const bluA = +(m.scoreBlueAuto||0);
+
+    const sd = scoreDetail || {};
+    const rsc = sd.red || {};
+    const bsc = sd.blue || {};
+
+    const rPatPts  = +(rsc.patternPoints??rsc.patternBonusPoints??0);
+    const bPatPts  = +(bsc.patternPoints??bsc.patternBonusPoints??0);
+    const rParkPts = +(rsc.parkPoints??rsc.endgameParkPoints??rsc.ascent1Points??rsc.ascentPoints??0);
+    const bParkPts = +(bsc.parkPoints??bsc.endgameParkPoints??bsc.ascent1Points??bsc.ascentPoints??0);
+    const rNavPts  = +(rsc.autoNavigationPoints??rsc.autoNavPoints??0);
+    const bNavPts  = +(bsc.autoNavigationPoints??bsc.autoNavPoints??0);
+    const rSampPts = +(rsc.autoSamplePoints??rsc.autoSpecimenPoints??0);
+    const bSampPts = +(bsc.autoSamplePoints??bsc.autoSpecimenPoints??0);
+    const rMovRP   = rsc.movementRankingPoint ? 1 : 0;
+    const bMovRP   = bsc.movementRankingPoint ? 1 : 0;
+    const rGoalRP  = rsc.goalRankingPoint    ? 1 : 0;
+    const bGoalRP  = bsc.goalRankingPoint    ? 1 : 0;
+    const rPatRP   = rsc.patternRankingPoint ? 1 : 0;
+    const bPatRP   = bsc.patternRankingPoint ? 1 : 0;
+
+    return {
+      season, event:code, match:`${code}-Q${m.matchNumber}`, rt, bt,
+      rs: redT - redF,   // red own score minus red own fouls only
+      bs: bluT - bluF,   // blue own score minus blue own fouls only
+      ra:Math.min(redA, redT-redF),
+      ba:Math.min(bluA, bluT-bluF),
+      rtot:redT, btot:bluT, rf:redF, bf:bluF,
+      won:redT>bluT?1:0,
+      mt:m.actualStartTime||m.startTime||'',
+      level:'qual',
+      matchNum:m.matchNumber,
+      rPatPts, bPatPts, rParkPts, bParkPts, rNavPts, bNavPts, rSampPts, bSampPts,
+      rMovRP, bMovRP, rGoalRP, bGoalRP, rPatRP, bPatRP,
+    };
+  } catch(e){ return null; }
+}
+
+async function ftcGetEvents(season){
+  const data = await ftcFetch(`/${season}/events`);
+  return data.events || [];
+}
+
+async function ftcFetchRetry(path, attempts=3){
+  for(let i=0; i<attempts; i++){
+    try{ return await ftcFetch(path); }
+    catch(e){
+      if(i === attempts-1) throw e;
+      await new Promise(r => setTimeout(r, 300 * Math.pow(2, i)));
+    }
+  }
+}
+
+async function fetchEventRows(season, eventCode){
+  let result;
+  try{ result = await ftcFetchRetry(`/${season}/schedule/${eventCode}/qual/hybrid`); }
+  catch(e){ dbg(`${eventCode} hybrid failed: ${e.message}`); return []; }
+
+  let schedule = result.schedule || result;
+  if(!Array.isArray(schedule)) schedule = [];
+
+  const rows = [];
+  for(const m of schedule){
+    const row = parseMatchRow(season, m, null, eventCode);
+    if(row) rows.push(row);
+  }
+  return rows;
+}
+
+async function fetchAllMatches(season){
+  setProgress(5);
+  dbg(`fetchAllMatches season=${season} via FTC Events API`);
+
+  const rankTab = document.getElementById('tab-rankings');
+  if(rankTab && !document.getElementById('_dbg_wrap')){
+    const wrap = document.createElement('div');
+    wrap.id = '_dbg_wrap';
+    wrap.style.cssText = 'margin:16px;padding:12px 14px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--text2);';
+    wrap.innerHTML = '<div style="font-weight:600;color:var(--text);margin-bottom:6px">⚙ Diagnostic Log</div><div id="_dbg"></div>';
+    rankTab.prepend(wrap);
+  }
+
+  let events = [];
+  try{
+    setMsg('Fetching event list from FTC Events API…');
+    events = await ftcGetEvents(season);
+    dbg(`Events: ${events.length} total`);
+  } catch(e){
+    dbg(`Event list failed: ${e.message}`, true);
+    setMsg(`Error fetching events: ${e.message}`);
+    return [];
+  }
+
+  const qualifying = events.filter(ev => {
+    const code = (ev.code||'').toUpperCase();
+    const type = (ev.typeName||ev.type||'').toLowerCase();
+    return !isOffseason(code, type);
+  });
+  dbg(`Qualifying events: ${qualifying.length}`);
+
+  const CONCURRENCY = 20;
+  const all = [];
+  let failCount = 0;
+  let idx = 0;
+  let completed = 0;
+
+  async function worker(){
+    while(idx < qualifying.length){
+      if(ST._cancelLoad) return;
+      const ev = qualifying[idx++];
+      setProgress(Math.min(92, 10 + Math.round((completed / qualifying.length) * 80)));
+      setMsg(`Fetching events… (${completed}/${qualifying.length} done, ${all.length} matches)`);
+      try{
+        const rows = await fetchEventRows(season, ev.code);
+        if(ST._cancelLoad) return;
+        all.push(...rows);
+      } catch(e){
+        failCount++;
+        dbg(`Event ${ev.code} failed: ${e.message}`);
+      }
+      completed++;
+    }
+  }
+
+  await Promise.all(Array.from({length: CONCURRENCY}, worker));
+  if(ST._cancelLoad){ ST.loading = false; setLive(false); return; }
+
+  setProgress(98);
+  dbg(`Done: ${all.length} rows, ${failCount} event failures`);
+  return all;
+}
+
+async function fetchTeamMatchesDirect(season, team){
+  try{
+    const evData = await ftcFetch(`/${season}/events?teamNumber=${team}`);
+    const events = evData.events || [];
+    const allRows = [];
+    for(const ev of events){
+      const rows = await fetchEventRows(season, ev.code);
+      allRows.push(...rows.filter(r => r.rt.includes(team) || r.bt.includes(team)));
+    }
+    return allRows;
+  } catch(e){ return []; }
+}
+
+async function getTeamName(teamNumber){
+  if(!teamNumber) return '';
+  if(TEAM_NAMES[teamNumber]) return TEAM_NAMES[teamNumber];
+  try{
+    const data = await ftcFetch(`/${TARGET_SEASON}/teams?teamNumber=${teamNumber}`);
+    const team = (data.teams||[])[0];
+    if(team){ const name = team.nameShort||team.nameFull||''; TEAM_NAMES[teamNumber] = name; return name; }
+  } catch(e){}
+  return '';
+}
+
+// ═══════════════════════════════════════════════════════════
+// LOAD
+// ═══════════════════════════════════════════════════════════
+function setMsg(s){ const el = document.getElementById('load-msg'); if(el) el.textContent = s; }
+function setProgress(p){ const el = document.getElementById('prog'); if(el) el.style.width = p+'%'; }
+function setLive(on){
+  document.getElementById('ldot')?.classList.toggle('on', on);
+  const s = document.getElementById('live-status');
+  if(s) s.textContent = on ? 'live' : 'offline';
+}
+
+async function loadData(forceRefresh=false, season=TARGET_SEASON){
+  if(ST.loading){
+    ST._cancelLoad = true;
+    await new Promise(r => setTimeout(r, 50));
+  }
+  ST._cancelLoad = false;
+  TARGET_SEASON = season;
+  localStorage.setItem('ftc_season', String(season));
+  ST.loading = true;
+  ST.loaded = false;
+  setLive(true);
+  const badge = document.querySelector('.season-badge');
+  if(badge) badge.textContent = `Season ${season}`;
+  const logoSub = document.querySelector('.logo-sub');
+  if(logoSub){
+    const names = {2025:'DECODE 2025–26',2024:'INTO THE DEEP 2024–25',2023:'CENTERSTAGE 2023–24',2022:'POWERPLAY 2022–23'};
+    logoSub.textContent = names[season]||`SEASON ${season}`;
+  }
+  try{
+    let rows = [];
+    const CACHE_KEY = getCacheKey(season);
+    const cached = localStorage.getItem(CACHE_KEY);
+    if(!forceRefresh && cached){
+      setMsg('Loading from cache…');
+      try{ rows = JSON.parse(cached); } catch(e){ localStorage.removeItem(CACHE_KEY); }
+    }
+    if(!rows.length){
+      setMsg(`Connecting to FTC Events API…`);
+      rows = await fetchAllMatches(season);
+      if(rows.length){
+        try{ localStorage.setItem(CACHE_KEY, JSON.stringify(rows)); } catch(e){}
+      }
+    }
+    if(!rows.length){
+      setMsg('No data loaded — see diagnostic log above');
+      ST.loading = false; setLive(false); return;
+    }
+    if(ST._cancelLoad){ ST.loading = false; setLive(false); return; }
+    const dbgWrap = document.getElementById('_dbg_wrap');
+    if(dbgWrap) dbgWrap.remove();
+
+    ST.rows = [];
+    ST.ratings = {}; ST.autoRatings = {}; ST.dcRatings = {};
+    ST.patternRatings = {}; ST.parkRatings = {}; ST.penaltyRatings = {};
+    ST.matchCounts = {}; ST.initialEpas = {}; ST.preEventEpas = {};
+    ST.regionEarlyAvg = {}; ST.teamRegion = {};
+    ST.autoStability = {}; ST.autoHistory = {};
+    ST.momentumEpa = {}; ST.scheduleStrength = {};
+    ST.seasonAccuracy = null; ST.seasonAvg = 30; ST.fallback = 15; ST.eloScale = 48;
+    ST.totalEvents = 0; ST.loadedEvents = 0;
+
+    ST.rows = rows;
+    setMsg('Computing EPA ratings…');
+    const res = buildEpa(rows);
+    Object.assign(ST, res);
+    ST.seasonAccuracy = computeSeasonAccuracy(res.chronoSnapshots);
+    ST.loaded = true;
+    renderRankings();
+    setMsg('');
+  } catch(e){
+    dbg(`loadData error: ${e.message}`, true);
+    setMsg(`Error: ${e.message}`);
+  }
+  ST.loading = false;
+  setLive(false);
+}
+
+// ═══════════════════════════════════════════════════════════
+// TAB MANAGEMENT
+// ═══════════════════════════════════════════════════════════
+const TABS = ['rankings','predictor','live','team','event','predrank'];
+function showTab(t){
+  TABS.forEach(id => { document.getElementById(`tab-${id}`).style.display = id===t?'':'none'; });
+  TABS.forEach(id => { document.getElementById(`nav-${id}`).classList.toggle('active', id===t); });
+  ST.currentTab = t;
+  if(t==='rankings' && ST.loaded) renderRankings();
+  if(t==='predictor') renderPredictor();
+  if(t==='live')      renderLive();
+  if(t==='team')      renderTeamTab();
+  if(t==='event')     renderEventTab();
+  if(t==='predrank')  renderPredRankTab();
+}
+
+// ═══════════════════════════════════════════════════════════
+// RANKINGS
+// ═══════════════════════════════════════════════════════════
+function getAllRanked(){
+  return Object.keys(ST.ratings).map(t => getStats(+t)).filter(Boolean)
+    .sort((a,b) => b.epa - a.epa).map((t,i) => ({...t, rank:i+1}));
+}
+
+function renderRankings(){
+  const all = getAllRanked();
+  let teams = [...all].sort((a,b) => ST.sortDir*(b[ST.sortCol]-a[ST.sortCol]));
+  if(ST.search)     teams = teams.filter(t => String(t.team).includes(ST.search));
+  if(ST.tierFilter) teams = teams.filter(t => t.uepa_label===ST.tierFilter);
+  const epas = all.map(t => t.epa);
+  const avgE = mean(epas);
+  const medE = [...epas].sort((a,b)=>a-b)[Math.floor(epas.length/2)]||0;
+  const maxE = Math.max(...epas);
+
+  const regionCount = Object.keys(ST.regionEarlyAvg||{}).length;
+
+  const accCard = ST.seasonAccuracy
+    ? `<div class="stat-card"><div class="sc-label">Season Acc.</div><div class="sc-val ${ST.seasonAccuracy.pct>=75?'green':ST.seasonAccuracy.pct>=68?'blue':'orange'}">${ST.seasonAccuracy.pct}%</div><div class="sc-sub">${ST.seasonAccuracy.correct}/${ST.seasonAccuracy.total} · excl. cold starts</div></div>`
+    : '';
+  const eloCard = `<div class="stat-card"><div class="sc-label">Elo Scale</div><div class="sc-val purple">${(ST.eloScale||0).toFixed(0)}</div><div class="sc-sub">calibrated from margins</div></div>`;
+  const regCard = regionCount
+    ? `<div class="stat-card"><div class="sc-label">Regions</div><div class="sc-val purple">${regionCount}</div><div class="sc-sub">regional priors active</div></div>`
+    : '';
+
+  const cols = [
+    {k:'rank',l:'#',ns:1},{k:'team',l:'Team'},{k:'epa',l:'Net EPA'},
+    {k:'uepa',l:'UEPA'},{k:'uepa_label',l:'Tier',ns:1},
+    {k:'auto_epa',l:'Auto EPA'},{k:'auto_stability',l:'Auto Stab.',ns:1},{k:'teleop_epa',l:'Teleop'},{k:'trend',l:'Trend'},{k:'matches',l:'M'},
+  ];
+  document.getElementById('tab-rankings').innerHTML = `
+    <div class="page-title">Team Rankings</div>
+    <div class="page-desc">Expected Points Added (EPA) — Decode 2025–26 · Momentum blending · Schedule-strength correction · Calibrated Elo scale</div>
+    <div class="stat-grid" style="margin-top:16px">
+      <div class="stat-card"><div class="sc-label">Teams</div><div class="sc-val blue">${all.length}</div><div class="sc-sub">${ST.rows.length} matches</div></div>
+      <div class="stat-card"><div class="sc-label">Avg EPA</div><div class="sc-val">${avgE.toFixed(1)}</div><div class="sc-sub">per robot · foul-adjusted</div></div>
+      <div class="stat-card"><div class="sc-label">Median EPA</div><div class="sc-val">${medE.toFixed(1)}</div><div class="sc-sub">50th percentile</div></div>
+      <div class="stat-card"><div class="sc-label">Peak EPA</div><div class="sc-val green">${maxE.toFixed(1)}</div><div class="sc-sub">top performer</div></div>
+      ${accCard}${eloCard}${regCard}
+    </div>
+    <div class="filter-row">
+      <input class="inp" placeholder="Search team #…" value="${ST.search}" oninput="ST.search=this.value;renderRankings()" style="max-width:180px">
+      ${['','Elite','Strong','Above Avg','Average','Below Avg','Developing'].map(tier => `
+        <button class="filter-chip ${ST.tierFilter===tier&&tier?'active':''}" onclick="ST.tierFilter='${tier}';renderRankings()">${tier||'All Tiers'}</button>
+      `).join('')}
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>${cols.map(c => `
+          <th class="${ST.sortCol===c.k?'sorted':''}" ${c.ns?'':
+            `onclick="ST.sortCol='${c.k}';ST.sortDir=ST.sortCol==='${c.k}'?-ST.sortDir:-1;renderRankings()"`}>
+            ${c.l}${!c.ns&&ST.sortCol===c.k?(ST.sortDir<0?'↓':'↑'):''}
+          </th>`).join('')}</tr></thead>
+        <tbody>${(()=>{
+          const mx = Math.max(...teams.map(t=>t.epa),1);
+          return teams.slice(0,300).map(t=>`
+            <tr onclick="goTeam(${t.team})">
+              <td class="mono dim" style="font-size:12px">${t.rank}</td>
+              <td class="mono" style="font-weight:700;color:var(--accent);font-size:14px">${t.team}</td>
+              <td><span class="mono" style="font-weight:600">${t.epa.toFixed(1)}</span><div class="epa-bar-track"><div class="epa-bar-fill" style="width:${Math.round(t.epa/mx*100)}%"></div></div></td>
+              <td class="mono" style="color:var(--text2)">${t.uepa.toFixed(3)}</td>
+              <td><span class="tier ${tierCls(t.uepa_label)}">${t.uepa_label}</span></td>
+              <td><span class="mono" style="font-size:12px">${t.auto_epa.toFixed(1)}</span><div class="epa-bar-track"><div class="epa-bar-fill green" style="width:${Math.round(t.auto_epa/mx*100)}%"></div></div></td>
+              <td>${(()=>{const s=t.auto_stability??1;const pct=Math.round(s*100);const col=s>=0.85?'var(--green)':s>=0.70?'var(--yellow)':'var(--orange)';return `<span class="mono" style="font-size:11px;color:${col}">${pct}%</span>`;})()}</td>
+              <td><span class="mono" style="font-size:12px">${t.teleop_epa.toFixed(1)}</span><div class="epa-bar-track"><div class="epa-bar-fill orange" style="width:${Math.round(Math.max(0,t.teleop_epa)/mx*100)}%"></div></div></td>
+              <td>${trendH(t.trend)}</td>
+              <td class="mono dim" style="font-size:12px">${t.matches}</td>
+            </tr>`).join('');
+        })()}</tbody>
+      </table>
+    </div>
+    ${teams.length>300?`<div class="empty" style="padding:10px">Showing 300 of ${teams.length} — filter to narrow</div>`:''}
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════
+// PREDICTOR
+// ═══════════════════════════════════════════════════════════
+function renderPredictor(){
+  if(!ST.loaded){ document.getElementById('tab-predictor').innerHTML=`<div class="loading-wrap"><div class="spinner"></div><div>Loading…</div></div>`; return; }
+  const pred = calcPred();
+  document.getElementById('tab-predictor').innerHTML = `
+    <div class="page-title">Match Predictor</div>
+    <div class="page-desc">Momentum-blended EPA · Schedule-strength correction · Calibrated Elo scale (${(ST.eloScale||0).toFixed(0)})</div>
+    <div class="pred-grid" style="margin-top:8px">
+      <div class="alliance-panel red-panel">
+        <div class="alliance-label red">Red Alliance</div>
+        ${[0,1].map(i=>`
+          <input class="team-inp red" placeholder="Team #" value="${ST.predRed[i]}"
+            oninput="ST.predRed[${i}]=this.value;updatePred()">
+          <div class="team-hint" id="rh${i}">${teamHint(+ST.predRed[i])}</div>
+        `).join('')}
+      </div>
+      <div class="vs-center"><div class="vs-text">VS</div></div>
+      <div class="alliance-panel blue-panel">
+        <div class="alliance-label blue">Blue Alliance</div>
+        ${[0,1].map(i=>`
+          <input class="team-inp blue" placeholder="Team #" value="${ST.predBlue[i]}"
+            oninput="ST.predBlue[${i}]=this.value;updatePred()">
+          <div class="team-hint" id="bh${i}">${teamHint(+ST.predBlue[i])}</div>
+        `).join('')}
+      </div>
+    </div>
+    <div id="pred-result">${pred?predResultH(pred):`<div class="info-box">Enter team numbers above to see prediction.</div>`}</div>
+  `;
+}
+
+function teamHint(t){
+  if(!t) return '';
+  const e = ST.ratings[t];
+  if(e === undefined){
+    const fb = regionalFallback(t, ST.seasonAvg);
+    const region = ST.teamRegion[t] || 'unknown region';
+    return `No data · regional prior ${fb.toFixed(1)} (${region})`;
+  }
+  const mom = ST.momentumEpa[t];
+  const u = toU(e, ST.seasonAvg);
+  const region = ST.teamRegion[t] || '';
+  const momStr = mom !== undefined && Math.abs(mom - e) > 0.5
+    ? ` · trend ${mom > e ? '↑' : '↓'} ${mom.toFixed(1)}`
+    : '';
+  return `EPA ${e.toFixed(1)} · UEPA ${u.toFixed(3)} · ${uepaLabel(u)}${momStr}${region?' · '+region:''}`;
+}
+
+function calcPred(){
+  const red  = ST.predRed.map(Number).filter(t => t > 0);
+  const blue = ST.predBlue.map(Number).filter(t => t > 0);
+  if(!red.length || !blue.length) return null;
+  const rwp = epaWinProb(red, blue, ST.ratings, ST.seasonAvg, ST.penaltyRatings, ST.autoStability);
+  const teamEpa = t => ST.ratings[t] ?? regionalFallback(t, ST.seasonAvg);
+  const teamPen = t => ST.penaltyRatings[t] ?? (ST.seasonAvg * PENALTY_PRIOR_FRAC);
+  const rA  = mean(red.map(teamEpa));
+  const bA  = mean(blue.map(teamEpa));
+  const rPen = mean(red.map(teamPen));
+  const bPen = mean(blue.map(teamPen));
+  return {red, blue, rwp, bwp:1-rwp, winner:rwp>.5?'RED':'BLUE',
+    rScore:Math.round((rA * EPA_INFLATE + rPen) * red.length),
+    bScore:Math.round((bA * EPA_INFLATE + bPen) * blue.length),
+    rA, bA, rU:toU(rA, ST.seasonAvg), bU:toU(bA, ST.seasonAvg)};
+}
+
+function predResultH(p){
+  const rb = Math.round(p.rwp*100);
+  const wc = p.winner==='RED'?'red':'blue';
+  const teamCard = t => {
+    const s = getStats(t);
+    const mom = ST.momentumEpa[t];
+    const momBadge = mom !== undefined && Math.abs(mom - (s?.epa ?? 0)) > 0.5
+      ? `<span class="mono dim" style="font-size:10px;margin-left:4px">${mom > (s?.epa??0) ? '↑' : '↓'} form ${mom.toFixed(1)}</span>`
+      : '';
+    const schedStr = ST.scheduleStrength[t];
+    const schedBadge = schedStr !== undefined
+      ? `<span class="mono dim" style="font-size:10px;margin-left:4px">sos ${schedStr.toFixed(1)}</span>`
+      : '';
+    if(s) return `<div style="margin-bottom:5px"><span class="mono" style="color:var(--accent2);font-weight:700">${t}</span> <span class="mono dim" style="font-size:11px">EPA ${s.epa.toFixed(1)}</span> <span class="tier ${tierCls(s.uepa_label)}" style="font-size:9px;margin-left:4px">${s.uepa_label}</span>${momBadge}${schedBadge}</div>`;
+    const fb = regionalFallback(t, ST.seasonAvg);
+    return `<div style="margin-bottom:5px"><span class="mono" style="color:var(--text2);font-weight:700">${t}</span> <span class="mono dim" style="font-size:11px">prior ${fb.toFixed(1)} · ${ST.teamRegion[t]||'?'}</span></div>`;
+  };
+  return `
+    <div class="result-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div class="mono dim" style="font-size:10px;margin-bottom:5px">Predicted winner</div>
+          <span class="win-badge ${wc}">${p.winner} WINS</span>
+        </div>
+        <div style="text-align:right">
+          <div class="mono dim" style="font-size:10px;margin-bottom:5px">Predicted score</div>
+          <div class="mono" style="font-size:14px;font-weight:700"><span style="color:var(--red)">${p.rScore}</span> <span class="dim">–</span> <span style="color:var(--accent2)">${p.bScore}</span></div>
+        </div>
+      </div>
+      <div class="win-bar"><div class="wb-red" style="width:${rb}%"></div><div class="wb-blue" style="width:${100-rb}%"></div></div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span class="win-pct red">${rb}%</span>
+        <span class="mono dim" style="font-size:10px">win probability</span>
+        <span class="win-pct blue">${100-rb}%</span>
+      </div>
+      <div class="divider"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div><div class="mono" style="font-size:10px;color:var(--red);margin-bottom:6px">RED ALLIANCE</div>${p.red.map(teamCard).join('')}</div>
+        <div><div class="mono" style="font-size:10px;color:var(--accent2);margin-bottom:6px">BLUE ALLIANCE</div>${p.blue.map(teamCard).join('')}</div>
+      </div>
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+        <span class="mono dim" style="font-size:10px">momentum blend + schedule correction + calibrated Elo (${(ST.eloScale||0).toFixed(0)})</span>
+        <span class="mono dim" style="font-size:10px">regional priors · 5%–95% cap</span>
+      </div>
+    </div>`;
+}
+
+function updatePred(){
+  const pred = calcPred();
+  const r = document.getElementById('pred-result');
+  if(r) r.innerHTML = pred?predResultH(pred):`<div class="info-box">Enter team numbers above to see prediction.</div>`;
+  for(let i=0;i<2;i++){
+    const re = document.getElementById(`rh${i}`), be = document.getElementById(`bh${i}`);
+    if(re) re.textContent = teamHint(+ST.predRed[i]);
+    if(be) be.textContent = teamHint(+ST.predBlue[i]);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// LIVE MATCH
+// ═══════════════════════════════════════════════════════════
+function renderLive(){
+  const el = document.getElementById('tab-live');
+  if(!ST.loaded){ el.innerHTML=`<div class="loading-wrap"><div class="spinner"></div><div>Loading…</div></div>`; return; }
+  el.innerHTML = `
+    <div class="page-title">Live Match</div>
+    <div class="page-desc">Enter teams & scores to preview EPA changes in real time</div>
+    <div class="info-box" style="margin-bottom:16px">Enter teams & scores → EPA changes preview live. Apply to commit to rankings.</div>
+    <div class="score-grid">
+      <div class="score-group" style="border-top:2px solid var(--red)">
+        <div class="score-label" style="color:var(--red)">RED ALLIANCE</div>
+        ${[0,1].map(i=>`<input class="team-inp red" placeholder="Team #" value="${LV.redTeams[i]}" oninput="LV.redTeams[${i}]=this.value;updateLive()" style="margin-bottom:5px">`).join('')}
+        <div class="score-2col" style="margin-top:10px">
+          <div class="score-field"><label>Total Points</label><input type="number" value="${LV.redScore}" oninput="LV.redScore=+this.value;updateLive()"></div>
+          <div class="score-field"><label>Auto Points</label><input type="number" value="${LV.redAuto}" oninput="LV.redAuto=+this.value;updateLive()"></div>
+        </div>
+        <div class="score-field"><label>Foul Pts Received</label><input type="number" value="${LV.redFoul}" oninput="LV.redFoul=+this.value;updateLive()"></div>
+      </div>
+      <div class="score-group" style="border-top:2px solid var(--accent)">
+        <div class="score-label" style="color:var(--accent2)">BLUE ALLIANCE</div>
+        ${[0,1].map(i=>`<input class="team-inp blue" placeholder="Team #" value="${LV.blueTeams[i]}" oninput="LV.blueTeams[${i}]=this.value;updateLive()" style="margin-bottom:5px">`).join('')}
+        <div class="score-2col" style="margin-top:10px">
+          <div class="score-field"><label>Total Points</label><input type="number" value="${LV.blueScore}" oninput="LV.blueScore=+this.value;updateLive()"></div>
+          <div class="score-field"><label>Auto Points</label><input type="number" value="${LV.blueAuto}" oninput="LV.blueAuto=+this.value;updateLive()"></div>
+        </div>
+        <div class="score-field"><label>Foul Pts Received</label><input type="number" value="${LV.blueFoul}" oninput="LV.blueFoul=+this.value;updateLive()"></div>
+      </div>
+    </div>
+    <div class="stat-card" style="margin-bottom:14px">
+      <div class="sc-label">EPA Changes Preview</div>
+      <div id="live-deltas">${liveDeltas()}</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-primary" onclick="applyLive()">Apply to Rankings</button>
+      <button class="btn" onclick="resetLive()">Reset</button>
+    </div>
+    ${LV.applied?'<div class="ok-box" style="margin-top:12px">EPA updated! Check Rankings to see changes.</div>':''}
+  `;
+}
+
+function calcLiveDeltas(){
+  const red  = LV.redTeams.map(Number).filter(t=>t>0);
+  const blue = LV.blueTeams.map(Number).filter(t=>t>0);
+  if(!red.length||!blue.length) return null;
+  const nr = red.length, nb = blue.length;
+  const rNet = (LV.redScore-LV.redFoul)-LV.blueFoul;
+  const bNet = (LV.blueScore-LV.blueFoul)-LV.redFoul;
+  const rShare = rNet/nr, bShare = bNet/nb;
+  const rAShare = Math.min(LV.redAuto/nr, rShare);
+  const bAShare = Math.min(LV.blueAuto/nb, bShare);
+  const m = mFactor();
+  const deltas = [];
+  for(const [teams,shr,ashr,oppShr,ally] of [[red,rShare,rAShare,bShare,'red'],[blue,bShare,bAShare,rShare,'blue']]){
+    const opp = ally==='red'?blue:red;
+    const epaOf = t => ST.ratings[t] ?? regionalFallback(t, ST.seasonAvg);
+    const aEpaOf = t => ST.autoRatings[t] ?? (epaOf(t) * AUTO_PRIOR_FRAC);
+    const eaAvg = mean(teams.map(epaOf));
+    const oppAvg = mean(opp.map(epaOf));
+    const aEaAvg = mean(teams.map(aEpaOf));
+    for(const t of teams){
+      const before = epaOf(t);
+      const aBef   = aEpaOf(t);
+      const mc     = ST.matchCounts[t]||0;
+      const k = kFactor(mc);
+      const td = epaUpdate(k, m, shr, eaAvg, oppShr, oppAvg);
+      const ad = k*clip(ashr-aEaAvg, -ERROR_CLIP, ERROR_CLIP);
+      const after = before+td, aAfter = Math.min(aBef+ad, after);
+      deltas.push({team:t, ally, before, after, aBef, aAfter, td, mc});
+    }
+  }
+  return deltas;
+}
+
+function liveDeltas(){
+  const d = calcLiveDeltas();
+  if(!d) return `<div class="empty" style="padding:16px;font-size:11px">Enter teams and scores to preview EPA changes.</div>`;
+  return `<div class="delta-grid">${d.map(x=>{
+    const col = x.ally==='red'?'var(--red)':'var(--accent2)';
+    const sign = x.td>=0?'+':'';
+    const cc = x.td>0?'trend-up':x.td<0?'trend-dn':'trend-flat';
+    return `<div class="delta-card">
+      <div class="mono" style="font-size:11px;color:${col};margin-bottom:3px">TEAM ${x.team}</div>
+      <div class="mono dim" style="font-size:10px">Before: ${x.before.toFixed(1)} · match ${x.mc+1}</div>
+      <div class="mono" style="font-size:18px;font-weight:700;color:${col}">${x.after.toFixed(1)}</div>
+      <div class="${cc} mono">${sign}${x.td.toFixed(2)} pts</div>
+      <div style="margin-top:8px">
+        <div class="mini-bar"><div class="mini-label">Auto</div><div class="mini-track"><div class="mini-fill" style="width:${Math.min(100,x.aAfter/Math.max(x.after,.1)*100)}%;background:var(--accent)"></div></div><div class="mini-val">${x.aAfter.toFixed(1)}</div></div>
+        <div class="mini-bar"><div class="mini-label">Teleop</div><div class="mini-track"><div class="mini-fill" style="width:${Math.min(100,Math.max(0,x.after-x.aAfter)/Math.max(x.after,.1)*100)}%;background:var(--orange)"></div></div><div class="mini-val">${(x.after-x.aAfter).toFixed(1)}</div></div>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function updateLive(){ const el=document.getElementById('live-deltas'); if(el) el.innerHTML=liveDeltas(); }
+
+function applyLive(){
+  const d = calcLiveDeltas();
+  if(!d) return;
+  for(const x of d){
+    ST.ratings[x.team]     = x.after;
+    ST.autoRatings[x.team] = x.aAfter;
+    ST.dcRatings[x.team]   = x.after-x.aAfter;
+    ST.matchCounts[x.team] = (ST.matchCounts[x.team]||0)+1;
+    // Update momentum too
+    if(!ST.momentumEpa) ST.momentumEpa = {};
+    ST.momentumEpa[x.team] = x.after;
+  }
+  const red  = LV.redTeams.map(Number).filter(t=>t>0);
+  const blue = LV.blueTeams.map(Number).filter(t=>t>0);
+  ST.rows.push({season:TARGET_SEASON, rt:red, bt:blue,
+    rs:(LV.redScore-LV.redFoul)-LV.blueFoul, bs:(LV.blueScore-LV.blueFoul)-LV.redFoul,
+    ra:LV.redAuto, ba:LV.blueAuto, rtot:LV.redScore, btot:LV.blueScore,
+    rf:LV.redFoul, bf:LV.blueFoul, won:LV.redScore>LV.blueScore?1:0,
+    mt:new Date().toISOString(), event:'LIVE', level:'qual'});
+  LV.applied = true;
+  try{ localStorage.setItem(getCacheKey(TARGET_SEASON), JSON.stringify(ST.rows)); } catch(e){}
+  renderLive();
+}
+
+function resetLive(){
+  Object.assign(LV,{redTeams:['',''],blueTeams:['',''],redScore:0,blueScore:0,redAuto:0,blueAuto:0,redFoul:0,blueFoul:0,applied:false});
+  renderLive();
+}
+
+// ═══════════════════════════════════════════════════════════
+// TEAM LOOKUP
+// ═══════════════════════════════════════════════════════════
+function renderTeamTab(){
+  document.getElementById('tab-team').innerHTML = `
+    <div class="page-title">Team Lookup</div>
+    <div class="page-desc">View individual team EPA stats and match history</div>
+    <div style="margin-bottom:20px">
+      <input class="inp" placeholder="Enter team number…" value="${teamSearchVal}"
+        oninput="teamSearchVal=this.value.trim();lookupTeam(+this.value)"
+        style="width:240px;font-size:15px">
+    </div>
+    <div id="team-detail">${teamSearchVal&&+teamSearchVal
+      ?`<div class="loading-wrap" style="min-height:120px"><div class="spinner"></div></div>`
+      :`<div class="empty">Enter a team number to view stats and match history.</div>`}</div>
+  `;
+  if(teamSearchVal&&+teamSearchVal) lookupTeam(+teamSearchVal);
+}
+
+async function lookupTeam(team){
+  const el = document.getElementById('team-detail');
+  if(!team||team<1){ if(el) el.innerHTML=`<div class="empty">Enter a team number to view stats.</div>`; return; }
+  if(!el) return;
+  el.innerHTML=`<div class="loading-wrap" style="min-height:120px"><div class="spinner"></div><div>Fetching team ${team}…</div></div>`;
+  const teamName = await getTeamName(team);
+  if(ST.ratings[team]!==undefined){ el.innerHTML=teamDetailH(team, teamName); return; }
+  try{
+    const matches = await fetchTeamMatchesDirect(TARGET_SEASON, team);
+    if(!matches||!matches.length){ el.innerHTML=`<div class="warn-box">Team ${team} has no matches in ${TARGET_SEASON}.</div>`; return; }
+    const newRows = [];
+    for(const m of matches){
+      try{
+        const rs=m?.scores?.red, bs=m?.scores?.blue;
+        if(!rs||!bs) continue;
+        const teams=m.teams||[];
+        const rt=teams.filter(t=>t.alliance==='Red').map(t=>t.teamNumber);
+        const bt=teams.filter(t=>t.alliance==='Blue').map(t=>t.teamNumber);
+        if(!rt.length||!bt.length) continue;
+        const redT=+rs.totalPoints||0, bluT=+bs.totalPoints||0;
+        const redF=+rs.foulPoints||0,  bluF=+bs.foulPoints||0;
+        newRows.push({season:TARGET_SEASON, event:(m.eventCode||'unknown').toUpperCase(), match:m.id, rt, bt,
+          rs: redT - redF, bs: bluT - bluF,   // own points minus own fouls only
+          ra:Math.min(+rs.autoPoints||0,redT-redF), ba:Math.min(+bs.autoPoints||0,bluT-bluF),
+          rtot:redT, btot:bluT, rf:redF, bf:bluF, won:redT>bluT?1:0,
+          mt:m.actualStartTime||m.scheduledStartTime||'',
+          level:'qual',
+          matchNum:m.matchNum||m.matchNumber||null,
+        });
+      } catch(e){}
+    }
+    if(!newRows.length){ el.innerHTML=`<div class="warn-box">Could not parse match data for team ${team}.</div>`; return; }
+    const res = buildEpa([...ST.rows,...newRows]);
+    Object.assign(ST, res);
+    el.innerHTML=teamDetailH(team, teamName);
+  } catch(e){ el.innerHTML=`<div class="warn-box">Error: ${e.message}</div>`; }
+}
+
+function teamDetailH(team, teamName){
+  const s = getStats(team);
+  if(!s) return `<div class="empty">Team ${team} not found.</div>`;
+  const all = getAllRanked();
+  const rank = all.findIndex(t=>t.team===team)+1;
+  const u = s.uepa, pct = Math.min(Math.round(u/3*100),100);
+  const autoFrac = Math.min(100, s.auto_epa/Math.max(s.epa,.1)*100);
+  const telFrac  = Math.min(100, Math.max(0,s.teleop_epa)/Math.max(s.epa,.1)*100);
+  const region   = ST.teamRegion[team] || 'Unknown';
+  const regAvg   = ST.regionEarlyAvg[region];
+  const regBadge = regAvg
+    ? `<span class="mono dim" style="font-size:10px;margin-left:8px">Region: ${region} · avg ${regAvg.toFixed(1)}</span>`
+    : `<span class="mono dim" style="font-size:10px;margin-left:8px">Region: ${region}</span>`;
+
+  const mom = ST.momentumEpa[team];
+  const schedStr = ST.scheduleStrength[team];
+  const momH = mom !== undefined
+    ? `<div class="mono dim" style="font-size:11px;margin-top:4px">Momentum EPA: <span style="color:${mom > s.epa?'var(--green)':'var(--orange)'}">${mom.toFixed(1)}</span>${mom>s.epa?' (improving)':mom<s.epa-1?' (declining)':''}</div>`
+    : '';
+  const schedH = schedStr !== undefined
+    ? `<div class="mono dim" style="font-size:11px">Schedule strength: <span style="color:var(--text2)">${schedStr.toFixed(1)}</span> (avg opp EPA)</div>`
+    : '';
+
+  return `
+    <div class="team-card">
+      <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)">
+        <div>
+          <div class="team-number">${team}</div>
+          <div class="team-name">${teamName||''}</div>
+        </div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap">
+            <span class="tier ${tierCls(s.uepa_label)}">${s.uepa_label}</span>
+            <span class="mono dim" style="font-size:11px">Rank #${rank} of ${all.length}</span>
+            ${regBadge}
+          </div>
+          <div class="mono dim" style="font-size:11px">${s.matches} matches · Trend ${s.trend>=0?'+':''}${s.trend.toFixed(1)}</div>
+          ${momH}${schedH}
+          <div class="uepa-bar"><div class="uepa-fill" style="width:${pct}%"></div></div>
+          <div class="mono dim" style="font-size:9px">UEPA ${u.toFixed(3)} (1.000 = season avg)</div>
+        </div>
+      </div>
+      <div class="epa-breakdown" style="grid-template-columns:repeat(6,1fr)">
+        <div class="epa-item"><div class="epa-label">Net EPA</div><div class="epa-value" style="color:var(--accent2)">${s.epa.toFixed(1)}</div></div>
+        <div class="epa-item"><div class="epa-label">Auto EPA</div><div class="epa-value" style="color:var(--green)">${s.auto_epa.toFixed(1)}</div></div>
+        <div class="epa-item"><div class="epa-label">Teleop EPA</div><div class="epa-value" style="color:var(--orange)">${s.teleop_epa.toFixed(1)}</div></div>
+        <div class="epa-item"><div class="epa-label">Pattern EPA</div><div class="epa-value" style="color:var(--purple);font-size:16px">${(ST.patternRatings[team]??0).toFixed(1)}</div></div>
+        <div class="epa-item"><div class="epa-label">Park EPA</div><div class="epa-value" style="color:var(--yellow);font-size:16px">${(ST.parkRatings[team]??0).toFixed(1)}</div></div>
+        <div class="epa-item"><div class="epa-label">Foul Drawn</div><div class="epa-value" style="color:var(--red);font-size:16px">${(ST.penaltyRatings[team]??0).toFixed(1)}</div></div>
+      </div>
+      ${(()=>{
+        const stab = s.auto_stability ?? 1.0;
+        const stabPct = Math.round(stab * 100);
+        const stabCol = stab >= 0.85 ? 'var(--green)' : stab >= 0.70 ? 'var(--yellow)' : 'var(--orange)';
+        const stabLabel = stab >= 0.85 ? 'Consistent' : stab >= 0.70 ? 'Moderate variance' : 'High variance — auto contribution weighted down';
+        const hist = ST.autoHistory[team] || [];
+        const histMax = Math.max(...hist, 1);
+        const sparkBars = hist.map(v => {
+          const h = Math.round(Math.max(2, (v/histMax)*20));
+          return `<div style="width:6px;height:${h}px;background:var(--green);border-radius:1px;opacity:0.75;flex-shrink:0"></div>`;
+        }).join('');
+        return `<div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <div>
+              <span class="mono" style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">Auto Stability</span>
+              <span class="mono" style="font-size:16px;font-weight:700;color:${stabCol};margin-left:10px">${stabPct}%</span>
+            </div>
+            <span class="mono dim" style="font-size:10px">${stabLabel}</span>
+          </div>
+          <div style="height:4px;background:var(--bg4);border-radius:2px;overflow:hidden;margin-bottom:8px">
+            <div style="height:100%;width:${stabPct}%;background:${stabCol};border-radius:2px;transition:width .4s"></div>
+          </div>
+          ${hist.length > 1 ? `<div style="display:flex;align-items:flex-end;gap:3px;height:22px">${sparkBars}</div>
+          <div class="mono dim" style="font-size:9px;margin-top:3px">Last ${hist.length} match auto scores (per-robot est.)</div>` : ''}
+        </div>`;
+      })()}
+      <div style="margin-bottom:14px">
+        <div class="mini-bar"><div class="mini-label">Auto</div><div class="mini-track"><div class="mini-fill" style="width:${autoFrac}%;background:var(--green)"></div></div><div class="mini-val">${s.auto_epa.toFixed(1)}</div></div>
+        <div class="mini-bar"><div class="mini-label">Teleop</div><div class="mini-track"><div class="mini-fill" style="width:${telFrac}%;background:var(--orange)"></div></div><div class="mini-val">${s.teleop_epa.toFixed(1)}</div></div>
+        <div class="mini-bar"><div class="mini-label">Pattern</div><div class="mini-track"><div class="mini-fill" style="width:${Math.min(100,(ST.patternRatings[team]??0)/Math.max(s.epa,.1)*100)}%;background:var(--purple)"></div></div><div class="mini-val">${(ST.patternRatings[team]??0).toFixed(1)}</div></div>
+        <div class="mini-bar"><div class="mini-label">Park</div><div class="mini-track"><div class="mini-fill" style="width:${Math.min(100,(ST.parkRatings[team]??0)/Math.max(s.epa,.1)*100)}%;background:var(--yellow)"></div></div><div class="mini-val">${(ST.parkRatings[team]??0).toFixed(1)}</div></div>
+      </div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:2px">
+        <button class="btn" onclick="ST.predRed[0]=${team};showTab('predictor');renderPredictor()">Add to Red →</button>
+        <button class="btn" onclick="ST.predBlue[0]=${team};showTab('predictor');renderPredictor()">Add to Blue →</button>
+      </div>
+      ${teamMatchHistoryH(team)}
+    </div>`;
+}
+
+function fmtTime(mt){
+  if(!mt) return '';
+  try{ return new Date(mt).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:true}); }
+  catch(e){ return ''; }
+}
+
+function teamMatchHistoryH(team){
+  const teamRows = ST.rows.filter(r=>r.rt.includes(team)||r.bt.includes(team));
+  if(!teamRows.length) return '';
+  const sorted = [...teamRows].sort((a,b)=>(a.mt||'').localeCompare(b.mt||''));
+  let wins=0,losses=0,ties=0;
+  const rowsH = sorted.map(row=>{
+    const isRed   = row.rt.includes(team);
+    const myTot   = isRed?(row.rtot??null):(row.btot??null);
+    const oppTot  = isRed?(row.btot??null):(row.rtot??null);
+    const lv      = (row.level||'qual').toLowerCase();
+    const isPO    = lv==='playoff'||lv.includes('elim')||lv.includes('final');
+    let outcome,outcomeCls;
+    if(myTot===null||myTot===undefined){outcome='TBD';outcomeCls='pending';}
+    else if(myTot>oppTot){outcome='WIN';outcomeCls='win';wins++;}
+    else if(myTot<oppTot){outcome='LOSS';outcomeCls='loss';losses++;}
+    else{outcome='TIE';outcomeCls='tie';ties++;}
+    const myTeams  = isRed?row.rt:row.bt;
+    const oppTeams = isRed?row.bt:row.rt;
+    const alliesH = myTeams.map(t=>`<span class="${t===team?'mh-team-self':'mh-team-other'}">${t}</span>`).join(' ');
+    const oppsH   = oppTeams.map(t=>`<span class="mh-team-other">${t}</span>`).join(' ');
+    const scoreH  = myTot!==null&&myTot!==undefined
+      ?`<span style="color:${outcomeCls==='win'?'var(--green)':outcomeCls==='loss'?'var(--red)':'var(--text2)'}">${myTot}</span><span class="dim">–</span><span>${oppTot}</span>`
+      :`<span class="dim">TBD</span>`;
+    return `<div class="mh-row">
+      <div class="mh-level ${isPO?'playoff':'qual'}">${isPO?'PLAYOFF':'QUAL'}</div>
+      <div class="mh-event"><div class="mh-event-code">${(row.event||'').toUpperCase()} ${row.matchNum?`#${row.matchNum}`:''}</div><div class="mh-event-time">${fmtTime(row.mt)}</div></div>
+      <div class="mh-alliances">
+        <div class="mh-alliance"><div class="mh-dot ${isRed?'red':'blue'}"></div><div class="mh-teams">${alliesH}</div></div>
+        <div class="mh-alliance"><div class="mh-dot ${isRed?'blue':'red'}"></div><div class="mh-teams">${oppsH}</div></div>
+      </div>
+      <div class="mh-score"><div class="mh-score-lbl">Score</div><div class="mh-score-val mono">${scoreH}</div></div>
+      <div class="mh-outcome ${outcomeCls}">${outcome}</div>
+    </div>`;
+  }).join('');
+  return `<div class="match-history">
+    <div class="divider"></div>
+    <div class="mh-title">Match History <span class="mono dim" style="font-size:11px">${wins}W–${losses}L${ties?`–${ties}T`:''}</span></div>
+    ${rowsH}
+  </div>`;
+}
+
+function goTeam(team){ teamSearchVal=String(team); showTab('team'); renderTeamTab(); }
+
+// ═══════════════════════════════════════════════════════════
+// EVENT BROWSER
+// ═══════════════════════════════════════════════════════════
+function getEventIndex(){
+  const idx = {};
+  for(const r of ST.rows){
+    const c=(r.event||'').toUpperCase();
+    if(!c||c==='DIRECT'||c==='LIVE') continue;
+    if(!idx[c]) idx[c]={code:c,matchCount:0,playedCount:0};
+    idx[c].matchCount++;
+    if(r.rtot!==undefined&&r.rtot!==null) idx[c].playedCount++;
+  }
+  return Object.values(idx).sort((a,b)=>a.code.localeCompare(b.code));
+}
+
+function renderEventTab(){
+  const root = document.getElementById('tab-event');
+  if(!ST.loaded){ root.innerHTML=`<div class="loading-wrap"><div class="spinner"></div><div>Loading…</div></div>`; return; }
+  const events = getEventIndex();
+  const detailH = ST.eventData?renderEventDetail(ST.eventData):`<div class="empty">← Select an event to view matches</div>`;
+  root.innerHTML = `
+    <div class="page-title">Event Browser</div>
+    <div class="page-desc">Browse all events with EPA-based match predictions</div>
+    <div class="event-browser" style="margin-top:8px">
+      <div class="event-list-panel">
+        <div class="event-search"><input placeholder="Filter events…" value="${evSearch}" oninput="evSearch=this.value.toUpperCase();refreshEvList()" autocomplete="off"></div>
+        <div class="event-list-items" id="event-list-items">${eventListH(events)}</div>
+      </div>
+      <div id="event-detail-panel">${detailH}</div>
+    </div>`;
+}
+
+function eventListH(events){
+  const filtered = evSearch?events.filter(e=>e.code.includes(evSearch)):events;
+  if(!filtered.length) return `<div class="empty" style="padding:16px;font-size:11px">No events match.</div>`;
+  return filtered.map(e=>`
+    <div class="event-item${ST.eventData&&ST.eventData.code===e.code?' active':''}" onclick="selectEvent('${e.code}')">
+      <div class="ev-code">${e.code}</div>
+      <div class="ev-count">${e.playedCount}/${e.matchCount} played · ${extractRegion(e.code)}</div>
+    </div>`).join('');
+}
+
+function refreshEvList(){ const el=document.getElementById('event-list-items'); if(el) el.innerHTML=eventListH(getEventIndex()); }
+
+function selectEvent(code){
+  const eventRows = ST.rows.filter(r=>(r.event||'').toUpperCase()===code);
+  if(!eventRows.length) return;
+  const rows = eventRows.map(r=>({...r,played:r.rtot!==undefined&&r.rtot!==null}))
+    .sort((a,b)=>(a.mt||'').localeCompare(b.mt||''));
+  const snap = ST.preEventEpas[code]||{};
+  let correct=0,total=0;
+  for(const row of rows){
+    if(!row.played||row.rtot===row.btot) continue;
+    const rwp    = epaWinProb(row.rt, row.bt, snap, ST.seasonAvg, ST.penaltyRatings);
+    const winner = rwp>0.5?'red':'blue';
+    const actual = row.rtot>row.btot?'red':'blue';
+    if(winner===actual) correct++;
+    total++;
+  }
+  ST.eventData = {code, rows, correct, total};
+  const dp = document.getElementById('event-detail-panel');
+  if(dp) dp.innerHTML = renderEventDetail(ST.eventData);
+  document.querySelectorAll('.event-item').forEach(el=>{
+    el.classList.toggle('active', el.querySelector('.ev-code')?.textContent===code);
+  });
+}
+
+function renderEventDetail(data){
+  const {code,rows,correct,total} = data;
+  const played  = rows.filter(r=>r.played).length;
+  const pending = rows.length-played;
+  const acc     = total>0?Math.round(correct/total*100):null;
+  const snap    = ST.preEventEpas[code]||{};
+  const region  = extractRegion(code);
+  const regAvg  = ST.regionEarlyAvg[region];
+  return `
+    <div class="stat-grid" style="margin-bottom:14px">
+      <div class="stat-card"><div class="sc-label">Event</div><div class="sc-val blue" style="font-size:16px">${code}</div><div class="sc-sub">Region: ${region}${regAvg?` · avg ${regAvg.toFixed(1)}`:''}  </div></div>
+      <div class="stat-card"><div class="sc-label">Matches</div><div class="sc-val">${rows.length}</div><div class="sc-sub">${played} played · ${pending} pending</div></div>
+      ${acc!==null?`<div class="stat-card"><div class="sc-label">Pred. Accuracy</div><div class="sc-val ${acc>=70?'green':acc>=55?'blue':'orange'}">${acc}%</div><div class="sc-sub">${correct}/${total} · regional prior</div></div>`:''}
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <div class="section-title">Matches</div>
+      <div class="mono dim" style="font-size:10px">✓ correct &nbsp;✗ wrong &nbsp;— pending</div>
+    </div>
+    ${rows.map((row,i)=>matchRowH(row,i+1,snap)).join('')}`;
+}
+
+function matchRowH(row, idx, snap){
+  const rwp        = epaWinProb(row.rt, row.bt, snap, ST.seasonAvg, ST.penaltyRatings);
+  const predWinner = rwp>0.5?'red':'blue';
+  const rb         = Math.round(rwp*100);
+  const played     = row.played||(row.rtot!==undefined&&(row.rtot>0||row.btot>0));
+  let actualWinner = null;
+  if(played){
+    if(row.rtot!==undefined&&row.btot!==undefined) actualWinner=row.rtot>row.btot?'red':row.btot>row.rtot?'blue':'tie';
+    else if(row.won===1) actualWinner='red';
+    else if(row.won===0) actualWinner='blue';
+  }
+  const predCorrect = actualWinner?(predWinner===actualWinner||actualWinner==='tie'):null;
+  const checkH = predCorrect===null?`<span class="check-tbd">—</span>`:predCorrect?`<span class="check-ok">✓</span>`:`<span class="check-no">✗</span>`;
+  const statusBadge = played?`<span class="status-badge badge-played">PLAYED</span>`:`<span class="status-badge badge-pending">SCHED</span>`;
+  const scoreH = played&&row.rtot!==undefined
+    ?`<div class="mr-score-val mono"><span style="color:var(--red)">${row.rtot}</span><span class="dim"> – </span><span style="color:var(--accent2)">${row.btot}</span></div>`
+    :`<div class="mr-score-val mono dim">TBD</div>`;
+  return `<div class="match-row">
+    <div class="mr-num">${idx}</div>
+    <div class="mr-alliances">
+      <div class="mr-alliance"><div class="mr-dot red"></div><div class="mr-teams">${row.rt.join(' ')}</div>${statusBadge}</div>
+      <div class="mr-alliance"><div class="mr-dot blue"></div><div class="mr-teams">${row.bt.join(' ')}</div></div>
+    </div>
+    <div class="mr-pred">
+      <div class="mr-pred-lbl">Prediction</div>
+      <div class="mr-pred-val" style="color:${predWinner==='red'?'var(--red)':'var(--accent2)'}">${predWinner.toUpperCase()}</div>
+      <div class="mr-wbar"><div class="wr" style="width:${rb}%"></div><div class="wb" style="width:${100-rb}%"></div></div>
+      <div class="mono dim" style="font-size:9px">${rb}% red</div>
+    </div>
+    <div class="mr-result">
+      <div class="mr-result-lbl">Result</div>
+      ${scoreH}
+    </div>
+    <div class="mr-check">${checkH}</div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// PREDICTIVE RANKINGS
+// ═══════════════════════════════════════════════════════════
+function renderPredRankTab(){
+  const root = document.getElementById('tab-predrank');
+  if(!ST.loaded){ root.innerHTML=`<div class="loading-wrap"><div class="spinner"></div><div>Loading…</div></div>`; return; }
+  const events = getEventIndex();
+  const sel    = ST.predRankEvent;
+  root.innerHTML = `
+    <div class="page-title">Predictive Rankings</div>
+    <div class="page-desc">Pre-tournament seeding using regional-prior EPA snapshots · Momentum-blended EPA · Calibrated Elo scale</div>
+    <div class="filter-row" style="margin-bottom:16px">
+      <select class="select" style="min-width:300px" onchange="ST.predRankEvent=this.value;renderPredRankTab()">
+        <option value="">— Select an event —</option>
+        ${events.map(e=>`<option value="${e.code}" ${e.code===sel?'selected':''}>${e.code} (${e.matchCount} matches)</option>`).join('')}
+      </select>
+    </div>
+    <div id="predrank-content">${sel?predRankTableH(sel):`<div class="empty">Select an event to view predictive rankings.</div>`}</div>`;
+}
+
+function predRankTableH(code){
+  const allEventRows = ST.rows.filter(r=>(r.event||'').toUpperCase()===code);
+  if(!allEventRows.length) return `<div class="empty">No match data for ${code}.</div>`;
+  const isQual = r=>{ const lv=(r.level||'').toLowerCase(); return lv===''||lv==='qual'||lv==='qualification'; };
+  const eventRows = allEventRows.filter(isQual);
+  if(!eventRows.length) return `<div class="empty">No qualification matches found for ${code}.</div>`;
+
+  const snap = ST.preEventEpas[code]||{};
+  const smartEpa = t => snap[t]!==undefined ? snap[t] : regionalFallback(t, ST.seasonAvg);
+
+  const teamSet = new Set();
+  for(const r of eventRows){ r.rt.forEach(t=>teamSet.add(t)); r.bt.forEach(t=>teamSet.add(t)); }
+
+  const isRegChamp = /CMP|RCMP|RC\d/.test(code.toUpperCase());
+  const movThresh  = isRegChamp ? 21 : 16;
+  const goalThresh = isRegChamp ? 42 : 36;
+  const patThresh  = isRegChamp ? 22 : 18;
+  const parkThresh = isRegChamp ? 6  : 4;
+
+  const snapPatEpa  = t => ST.patternRatings[t]  ?? (smartEpa(t) * PATTERN_PRIOR_FRAC);
+  const snapParkEpa = t => ST.parkRatings[t]      ?? (smartEpa(t) * PARK_PRIOR_FRAC);
+  const snapAutoEpa = t => ST.autoRatings[t]      ?? (smartEpa(t) * AUTO_PRIOR_FRAC);
+
+  const matchPreds = eventRows.map(row => {
+    const snapSmart = {...snap};
+    for(const t of [...row.rt,...row.bt]) if(snapSmart[t]===undefined) snapSmart[t]=smartEpa(t);
+
+    const rwp = epaWinProb(row.rt, row.bt, snapSmart, ST.seasonAvg, ST.penaltyRatings, ST.autoStability);
+    const predWinner = rwp > 0.5 ? 'red' : 'blue';
+    const isToss     = rwp >= 0.45 && rwp <= 0.55;
+
+    const rSum = row.rt.reduce((s,t)=>s+(snapSmart[t]??smartEpa(t)),0);
+    const bSum = row.bt.reduce((s,t)=>s+(snapSmart[t]??smartEpa(t)),0);
+
+    const rAutoSum = row.rt.reduce((s,t)=>s+snapAutoEpa(t), 0);
+    const bAutoSum = row.bt.reduce((s,t)=>s+snapAutoEpa(t), 0);
+
+    const rPatSum  = row.rt.reduce((s,t)=>s+snapPatEpa(t),  0);
+    const bPatSum  = row.bt.reduce((s,t)=>s+snapPatEpa(t),  0);
+    const rPat     = rPatSum >= patThresh  ? 1 : 0;
+    const bPat     = bPatSum >= patThresh  ? 1 : 0;
+
+    const rParkSum = row.rt.reduce((s,t)=>s+snapParkEpa(t), 0);
+    const bParkSum = row.bt.reduce((s,t)=>s+snapParkEpa(t), 0);
+    const rPark    = rParkSum >= parkThresh ? 1 : 0;
+    const bPark    = bParkSum >= parkThresh ? 1 : 0;
+
+    const rMov  = rAutoSum * 2 >= movThresh ? 1 : 0;
+    const bMov  = bAutoSum * 2 >= movThresh ? 1 : 0;
+
+    const rGoal = rSum >= goalThresh ? 1 : 0;
+    const bGoal = bSum >= goalThresh ? 1 : 0;
+
+    const rWinRP = isToss ? 1 : (predWinner==='red' ? 3 : 0);
+    const bWinRP = isToss ? 1 : (predWinner==='blue'? 3 : 0);
+
+    return {
+      row, rwp, predWinner,
+      rPredRP: rWinRP + rMov + rGoal + rPat + rPark,
+      bPredRP: bWinRP + bMov + bGoal + bPat + bPark,
+      rAutoEst: rAutoSum, bAutoEst: bAutoSum,
+    };
+  });
+
+  const teamStats = {};
+  for(const t of teamSet) teamStats[t] = {
+    team:t, preEpa:smartEpa(t),
+    predRpTotal:0, predMatchCount:0, predAutoSum:0,
+    predWins:0, predLosses:0,
+    played:0, wins:0, losses:0, ties:0,
+    actualRpTotal:0, actualAutoSum:0,
+    correct:0,
+  };
+
+  let globalCorrect=0, globalTotal=0;
+
+  for(const {row, rwp, predWinner, rPredRP, bPredRP, rAutoEst, bAutoEst} of matchPreds){
+    const played = row.rtot !== undefined && row.rtot !== null;
+
+    for(const t of row.rt){ if(teamStats[t]){
+      teamStats[t].predRpTotal   += rPredRP;
+      teamStats[t].predMatchCount++;
+      teamStats[t].predAutoSum   += rAutoEst;
+      if(predWinner==='red') teamStats[t].predWins++; else teamStats[t].predLosses++;
+    }}
+    for(const t of row.bt){ if(teamStats[t]){
+      teamStats[t].predRpTotal   += bPredRP;
+      teamStats[t].predMatchCount++;
+      teamStats[t].predAutoSum   += bAutoEst;
+      if(predWinner==='blue') teamStats[t].predWins++; else teamStats[t].predLosses++;
+    }}
+
+    if(!played) continue;
+
+    const actual  = row.rtot > row.btot ? 'red' : row.btot > row.rtot ? 'blue' : 'tie';
+    const correct = (actual !== 'tie') && (predWinner === actual);
+    if(actual !== 'tie'){ if(correct) globalCorrect++; globalTotal++; }
+
+    const rActWinRP = actual==='red' ? 3 : actual==='tie' ? 1 : 0;
+    const bActWinRP = actual==='blue'? 3 : actual==='tie' ? 1 : 0;
+    const rMilRP = (row.rMovRP??0) + (row.rGoalRP??0) + (row.rPatRP??0);
+    const bMilRP = (row.bMovRP??0) + (row.bGoalRP??0) + (row.bPatRP??0);
+    const rActRP = rActWinRP + rMilRP;
+    const bActRP = bActWinRP + bMilRP;
+
+    for(const t of row.rt){ if(teamStats[t]){
+      teamStats[t].played++;
+      teamStats[t].actualRpTotal += rActRP;
+      teamStats[t].actualAutoSum += (row.ra||0) / (row.rt.length||1);
+      if(actual==='red'){ teamStats[t].wins++; if(correct) teamStats[t].correct++; }
+      else if(actual==='tie') teamStats[t].ties++;
+      else teamStats[t].losses++;
+    }}
+    for(const t of row.bt){ if(teamStats[t]){
+      teamStats[t].played++;
+      teamStats[t].actualRpTotal += bActRP;
+      teamStats[t].actualAutoSum += (row.ba||0) / (row.bt.length||1);
+      if(actual==='blue'){ teamStats[t].wins++; if(correct) teamStats[t].correct++; }
+      else if(actual==='tie') teamStats[t].ties++;
+      else teamStats[t].losses++;
+    }}
+  }
+
+  const acc        = globalTotal>0 ? Math.round(globalCorrect/globalTotal*100) : null;
+  const playedCount= eventRows.filter(r=>r.rtot!==undefined&&r.rtot!==null).length;
+  const hasPlayed  = playedCount > 0;
+
+  const allTeams = Object.values(teamStats).sort((a,b) => {
+    const aAvg = a.predMatchCount ? a.predRpTotal/a.predMatchCount : 0;
+    const bAvg = b.predMatchCount ? b.predRpTotal/b.predMatchCount : 0;
+    if(Math.abs(aAvg-bAvg) > 0.001) return bAvg-aAvg;
+    return b.predAutoSum - a.predAutoSum;
+  });
+
+  const region = extractRegion(code);
+  const regAvg = ST.regionEarlyAvg[region];
+  return `
+    <div class="stat-grid" style="margin-bottom:14px">
+      <div class="stat-card"><div class="sc-label">Event</div><div class="sc-val blue" style="font-size:16px">${code}</div><div class="sc-sub">${teamSet.size} teams · ${region}${regAvg?` avg ${regAvg.toFixed(1)}`:''}</div></div>
+      <div class="stat-card"><div class="sc-label">Qual Matches</div><div class="sc-val">${eventRows.length}</div><div class="sc-sub">${playedCount} played</div></div>
+      ${acc!==null?`<div class="stat-card"><div class="sc-label">Pred. Accuracy</div><div class="sc-val ${acc>=75?'green':acc>=60?'blue':'orange'}">${acc}%</div><div class="sc-sub">${globalCorrect}/${globalTotal} · calibrated Elo</div></div>`:''}
+      <div class="stat-card"><div class="sc-label">Top Pre-EPA</div><div class="sc-val green">${allTeams.length?Math.max(...allTeams.map(t=>t.preEpa)).toFixed(1):'—'}</div><div class="sc-sub">entering tournament</div></div>
+    </div>
+    <div class="info-box" style="margin-bottom:12px">
+      📊 <strong>Ranking Points</strong> — Up to <strong>7 RP/match</strong>:
+      Win <strong>(3)</strong> or Tie (1) + Movement RP + Goal RP + Pattern RP + Park RP.
+      Pattern &amp; Park RPs predicted from dedicated sub-EPAs trained on those specific point sources.
+      Thresholds: Movement ${movThresh} · Goal ${goalThresh} · Pattern ${patThresh} · Park ${parkThresh}.
+    </div>
+    <div class="section-header">
+      <div class="section-title">Predicted Rankings</div>
+      <div class="section-sub">Sorted by pred avg RP · actual RP shown when available · TBP1: cumulative auto pts</div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>#</th><th>Team</th><th>Pre-Event EPA</th><th>Tier</th>
+          <th>Pred Avg RP</th>
+          ${hasPlayed?`<th>Actual Avg RP</th>`:''}
+          <th>Pred W–L</th>
+          ${hasPlayed?`<th>Actual W–L</th><th>Match Acc.</th>`:''}
+        </tr></thead>
+        <tbody>${allTeams.map((t,i)=>{
+          const u   = toU(t.preEpa, ST.seasonAvg);
+          const lbl = uepaLabel(u);
+
+          const predAvgRp = t.predMatchCount ? (t.predRpTotal / t.predMatchCount).toFixed(2) : '—';
+          const predRpVal = parseFloat(predAvgRp)||0;
+          const predRpColor = predRpVal>=4.5?'var(--green)':predRpVal>=3?'var(--accent2)':predRpVal>=1.5?'var(--yellow)':'var(--text2)';
+
+          const actAvgRp = hasPlayed && t.played>0
+            ? (t.actualRpTotal / t.played).toFixed(2) : null;
+          const actRpVal = parseFloat(actAvgRp)||0;
+          const actRpColor = actRpVal>=4.5?'var(--green)':actRpVal>=3?'var(--accent2)':actRpVal>=1.5?'var(--yellow)':'var(--text2)';
+
+          const accCell = t.played>0
+            ? `<td class="mono" style="color:${t.correct/t.played>=.65?'var(--green)':t.correct/t.played>=.5?'var(--accent2)':'var(--orange)'}">${Math.round(t.correct/t.played*100)}% <span class="dim">(${t.correct}/${t.played})</span></td>`
+            : `<td class="mono dim">—</td>`;
+          const actualWL = hasPlayed ? `<td class="mono">${t.wins}–${t.losses}${t.ties>0?`–${t.ties}`:''}</td>` : '';
+          const actRpCell = hasPlayed
+            ? `<td class="mono" style="font-weight:600;color:${actRpColor}">${actAvgRp??'—'}</td>`
+            : '';
+
+          return `<tr onclick="goTeam(${t.team})">
+            <td class="mono dim">${i+1}</td>
+            <td class="mono" style="font-weight:700;color:var(--accent2)">${t.team}</td>
+            <td class="mono" style="font-weight:600">${t.preEpa.toFixed(1)}</td>
+            <td><span class="tier ${tierCls(lbl)}">${lbl}</span></td>
+            <td class="mono" style="font-weight:700;color:${predRpColor}">${predAvgRp}</td>
+            ${actRpCell}
+            <td class="mono" style="color:var(--accent2)">${t.predWins}–${t.predLosses}</td>
+            ${actualWL}${hasPlayed?accCell:''}
+          </tr>`;
+        }).join('')}</tbody>
+      </table>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════════════════════
+loadData(false, TARGET_SEASON);
+</script>
+</body>
+</html>
