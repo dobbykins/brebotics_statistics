@@ -289,6 +289,10 @@ tbody td{padding:10px 14px;font-size:13px}
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2L2 14h12L8 2z"/></svg>
       Pred. Rankings
     </button>
+    <button class="nav-item" onclick="showTab('diag')" id="nav-diag">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/></svg>
+      Diagnostics
+    </button>
   </nav>
 
   <div class="main">
@@ -305,6 +309,7 @@ tbody td{padding:10px 14px;font-size:13px}
       <div id="tab-team"       style="display:none"></div>
       <div id="tab-event"      style="display:none"></div>
       <div id="tab-predrank"   style="display:none"></div>
+      <div id="tab-diag"       style="display:none"></div>
     </div>
   </div>
 </div>
@@ -396,23 +401,22 @@ async function ftcFetch(path){
 // ═══════════════════════════════════════════════════════════
 // EPA PARAMETERS
 // ═══════════════════════════════════════════════════════════
-const K_RAMP_START  = 2;
-const K_RAMP_END    = 6;
-const K_PEAK_VAL    = 0.50;
-const K_PLATEAU_END = 14;  // peak lasts through ~2 events worth of matches
-const K_FLOOR       = 0.12; // low floor so EPA converges — experienced teams stabilize
+const K_RAMP_START  = 1;   // full K from match 1 — no warmup needed within a single event
+const K_RAMP_END    = 3;   // ramp over first 2 matches
+const K_PEAK_VAL    = 0.45;
+const K_PLATEAU_END = 5;   // hold peak through match 5 (covers most FTC qual schedules)
+const K_FLOOR       = 0.3; // high floor — within one event, every match should matter equally
 
-const ERROR_CLIP  = 6;
 const AUTO_PRIOR_FRAC = 0.22;
 
-const REGION_EARLY_EVENTS = 3;
+const REGION_EARLY_EVENTS = 8;
 const REGION_FALLBACK_FRAC = 0.92;
 const GLOBAL_FALLBACK_FRAC = 0.88;
+const PRIOR_SEASON_WEIGHT = 0.35; // 0 = pure regional prior, 1 = full prior season carry-over
 const WIN_PROB_SCALE = 1.8;
 
 const PATTERN_PRIOR_FRAC = 0.12;
 const PARK_PRIOR_FRAC    = 0.05;
-const PENALTY_PRIOR_FRAC = 0.08;
 const EPA_INFLATE = 1.0;
 
 const AUTO_STABILITY_WINDOW = 8;
@@ -426,21 +430,22 @@ const MOMENTUM_WEIGHT    = 0.35; // blend: 0.35 * momentum_epa + 0.65 * full_epa
 
 // ── NEW: Opponent-strength correction ─────────────────────────────────────────
 // Teams with high/low average opponent EPA get their prediction EPA adjusted
-const OPP_STRENGTH_WEIGHT = 0.08; // used only in win probability prediction, not in EPA itself
+
 
 // ── NEW: Better calibrated Elo scale ──────────────────────────────────────────
 // Instead of fixed seasonAvg*1.8, use actual score margin distribution
 // We compute the MAD (median absolute margin) from played matches and use that
 // Elo logistic: P(red wins) = 1 / (1 + 10^(d / elo_scale))
 // Where elo_scale = f(score margin spread). Higher spread → harder to be sure.
-const ELO_SCALE_MULTIPLIER = 1.6;  // slightly tighter than original 1.8
+const ELO_SCALE_MULTIPLIER = 1.8;
 
 // ── NEW: Min prediction matches (raised) ──────────────────────────────────────
-const MIN_MATCHES_FOR_PRED = 3;   // was 2 — require a bit more data before trusting EPA
-const EPA_TRUST_RAMP_END   = 8;   // was 6 — longer ramp to full trust
+const MIN_MATCHES_FOR_PRED = 3;
+const EPA_TRUST_RAMP_END   = 8;
 
-function getCacheKey(season){ return `ftc_decode_matches_v17_${season}`; }
+function getCacheKey(season){ return `ftc_decode_matches_v21_${season}`; }
 function getCacheTimeKey(season){ return `ftc_decode_matches_time_v17_${season}`; }
+function getPriorSeasonCacheKey(season){ return `ftc_prior_epa_v1_${season}`; } // frozen — never invalidated on force refresh
 
 // ═══════════════════════════════════════════════════════════
 // STATE
@@ -448,7 +453,7 @@ function getCacheTimeKey(season){ return `ftc_decode_matches_time_v17_${season}`
 const ST = {
   loaded:false, loading:false, _cancelLoad:false,
   rows:[], ratings:{}, autoRatings:{}, dcRatings:{},
-  patternRatings:{}, parkRatings:{}, penaltyRatings:{},
+  patternRatings:{}, parkRatings:{},
   matchCounts:{}, seasonAvg:30,
   initialEpas:{}, preEventEpas:{},
   regionEarlyAvg:{}, teamRegion:{}, fallback:15,
@@ -554,11 +559,11 @@ function kFactor(n){
   if(n <= K_RAMP_START)  return K_FLOOR;
   if(n <= K_RAMP_END)    return K_FLOOR + (K_PEAK_VAL - K_FLOOR) * (n - K_RAMP_START) / (K_RAMP_END - K_RAMP_START);
   if(n <= K_PLATEAU_END) return K_PEAK_VAL;
-  return Math.max(K_FLOOR, K_PEAK_VAL - (1/20) * (n - K_PLATEAU_END));
+  // Gentle linear decay after plateau, never below floor
+  return Math.max(K_FLOOR, K_PEAK_VAL - ((K_PEAK_VAL - K_FLOOR) / 30) * (n - K_PLATEAU_END));
 }
 
 function mFactor(){ return 0; } // EPA is pure score decomposition — opponent quality does not affect EPA
-function clip(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
 function mean(arr){ return arr.length ? arr.reduce((a,b) => a+b, 0) / arr.length : 0; }
 function median(arr){ if(!arr.length) return 0; const s=[...arr].sort((a,b)=>a-b); return s[Math.floor(s.length/2)]; }
 function variance(arr){ if(arr.length < 2) return 0; const m = mean(arr); return mean(arr.map(x => (x-m)**2)); }
@@ -592,8 +597,7 @@ function trendH(v){
 }
 
 function epaUpdate(k, m, scoreShare, myEpa, oppShare, oppEpa){
-  const delta = k * (1 / (1 + m)) * ((scoreShare - myEpa) - m * (oppShare - oppEpa));
-  return clip(delta, -ERROR_CLIP, ERROR_CLIP);
+  return k * (1 / (1 + m)) * ((scoreShare - myEpa) - m * (oppShare - oppEpa));
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -615,37 +619,22 @@ function predictionEpa(team, epaMap, seasonAvg) {
   return rawEpa;
 }
 
-function scheduleAdjustedEpa(team, baseEpa, seasonAvg) {
-  // If a team has faced unusually weak/strong opponents, nudge their prediction EPA
-  // This corrects for inflated/deflated EPAs from schedule bias
-  const schedStrength = ST.scheduleStrength[team];
-  if(schedStrength === undefined) return baseEpa;
-  const diff = schedStrength - seasonAvg; // positive = faced stronger opponents
-  // Small positive adjustment for teams that earned their EPA against tough opponents
-  return baseEpa + diff * OPP_STRENGTH_WEIGHT;
-}
 
-function epaWinProb(redTeams, blueTeams, epaMap, seasonAvg, penaltyMap, stabilityMap) {
-  penaltyMap  = penaltyMap  || {};
+function epaWinProb(redTeams, blueTeams, epaMap, seasonAvg, _unused, stabilityMap) {
   stabilityMap = stabilityMap || {};
-  const penFb = seasonAvg * PENALTY_PRIOR_FRAC;
 
   const teamScore = (t) => {
-    // Step 1: get base prediction EPA (momentum-blended)
+    // Step 1: get base prediction EPA (momentum-blended), penalties excluded
     let epa = predictionEpa(t, epaMap, seasonAvg);
-    // Step 2: schedule-strength correction
-    epa = scheduleAdjustedEpa(t, epa, seasonAvg);
     epa = Math.max(0, epa);
 
-    const pen = penaltyMap[t] ?? penFb;
-
-    // Step 3: auto stability — unstable auto teams get their auto portion
+    // Step 2: auto stability — unstable auto teams get their auto portion
     // regressed toward the mean; the rest stays
     const aepa = ST.autoRatings[t] ?? epa * AUTO_PRIOR_FRAC;
     const stability = (stabilityMap && stabilityMap[t]) ?? 1.0;
     const effectiveAuto = aepa * stability + (epa * AUTO_PRIOR_FRAC) * (1 - stability);
     const dcEpa = Math.max(0, epa - aepa);
-    return Math.max(0, effectiveAuto + dcEpa) + pen;
+    return Math.max(0, effectiveAuto + dcEpa);
   };
 
   const rSum = redTeams.reduce((s, t) => s + teamScore(t), 0);
@@ -660,9 +649,9 @@ function epaWinProb(redTeams, blueTeams, epaMap, seasonAvg, penaltyMap, stabilit
 // ═══════════════════════════════════════════════════════════
 // BUILD EPA — chronological predict-then-update
 // ═══════════════════════════════════════════════════════════
-function buildEpa(rows){
+function buildEpa(rows, priorRatings = {}){
   const ratings = {}, autoR = {}, dcR = {}, mc = {};
-  const patR = {}, parkR = {}, penR = {};
+  const patR = {}, parkR = {};
   const autoHistory = {};
   const chronoSnapshots = [];
 
@@ -678,11 +667,11 @@ function buildEpa(rows){
   }
   const seasonAvg = perRobot.length ? mean(perRobot) : 30;
 
-  // ── NEW: calibrate Elo scale from actual score margins ───────────────────
+  // ── Calibrate Elo scale from penalty-free score margins ─────────────────
   const margins = [];
   for(const r of rows){
-    if(r.rtot !== undefined && r.btot !== undefined && r.rtot !== r.btot){
-      margins.push(Math.abs(r.rtot - r.btot));
+    if(r.rs !== undefined && r.bs !== undefined && r.rs !== r.bs){
+      margins.push(Math.abs(r.rs - r.bs));
     }
   }
   // Use 75th percentile of margin distribution as Elo scale
@@ -694,10 +683,30 @@ function buildEpa(rows){
 
   const { regionEarlyAvg, teamRegion } = buildRegionalPriors(rows);
 
+  const isCareer = priorRatings._isCareer === true;
+  const careerPrior = isCareer ? priorRatings.careerPrior : null;
+  // legacy: priorRatings is a flat {team->EPA} map (single season)
+  const priorSeasonValues = !isCareer ? Object.values(priorRatings) : [];
+  const priorSeasonAvg = priorSeasonValues.length ? mean(priorSeasonValues) : 0;
+
   const initEpa = (team) => {
     const region = teamRegion[team];
-    if (region && regionEarlyAvg[region]) return regionEarlyAvg[region] * REGION_FALLBACK_FRAC;
-    return seasonAvg * GLOBAL_FALLBACK_FRAC;
+    const regionalPrior = (region && regionEarlyAvg[region])
+      ? regionEarlyAvg[region] * REGION_FALLBACK_FRAC
+      : seasonAvg * GLOBAL_FALLBACK_FRAC;
+    if(isCareer && careerPrior[team] !== undefined){
+      // careerPrior stores ratio relative to each season's avg; scale to current season
+      const scaledPrior = careerPrior[team] * seasonAvg;
+      return PRIOR_SEASON_WEIGHT * scaledPrior + (1 - PRIOR_SEASON_WEIGHT) * regionalPrior;
+    }
+    if(!isCareer){
+      const priorRaw = priorRatings[team];
+      if(priorRaw !== undefined && priorSeasonAvg > 0){
+        const scaledPrior = priorRaw * (seasonAvg / priorSeasonAvg);
+        return PRIOR_SEASON_WEIGHT * scaledPrior + (1 - PRIOR_SEASON_WEIGHT) * regionalPrior;
+      }
+    }
+    return regionalPrior;
   };
 
   const allTeams = new Set();
@@ -708,7 +717,6 @@ function buildEpa(rows){
     autoR[t]   = init * AUTO_PRIOR_FRAC;
     patR[t]    = init * PATTERN_PRIOR_FRAC;
     parkR[t]   = init * PARK_PRIOR_FRAC;
-    penR[t]    = init * PENALTY_PRIOR_FRAC;
     mc[t]      = 0;
     autoHistory[t]      = [];
     recentMatchScores[t] = [];
@@ -744,28 +752,27 @@ function buildEpa(rows){
     }
 
     if(row.rtot !== undefined && row.rtot !== null && row.rtot !== row.btot){
-      const snap = {}, penSnap = {}, mcSnap = {};
+      const snap = {}, mcSnap = {};
       for(const t of [...red,...blue]){
-        snap[t]    = ratings[t] ?? initEpa(t);
-        penSnap[t] = penR[t] ?? initEpa(t) * PENALTY_PRIOR_FRAC;
-        mcSnap[t]  = mc[t] || 0;
+        snap[t]   = ratings[t] ?? initEpa(t);
+        mcSnap[t] = mc[t] || 0;
       }
-      chronoSnapshots.push({row, snap, penSnap, mcSnap});
+      chronoSnapshots.push({row, snap, mcSnap});
     }
 
     if(row.rtot == null || row.btot == null || row.rtot === row.btot){
-      for(const t of [...red,...blue]) mc[t] = (mc[t]||0) + 1;
+      for(const t of [...red,...blue]){ mc[t] = (mc[t]||0) + 1; mcEvent[t] = (mcEvent[t]||0) + 1; }
       globalN += 1;
       continue;
     }
 
-    const nr = red.length, nb = blue.length;
-    const rShare = row.rs/nr, bShare = row.bs/nb;
+    const nr = 2, nb = 2;  // FTC alliances are always 2 teams
+    const rShare = row.rs / nr;
+    const bShare = row.bs / nb;
 
     const rTotalAuto = row.ra || 0;
     const bTotalAuto = row.ba || 0;
 
-    // Auto score: equal split per robot (Statbotics approach — no per-robot breakdown available)
     const rAutoShares = red.map(() => rTotalAuto / nr);
     const bAutoShares = blue.map(() => bTotalAuto / nb);
 
@@ -773,8 +780,6 @@ function buildEpa(rows){
     const bPatShare  = (row.bPatPts  ?? 0) / nb;
     const rParkShare = (row.rParkPts ?? 0) / nr;
     const bParkShare = (row.bParkPts ?? 0) / nb;
-    const rPenShare = (row.bf ?? 0) / nr;
-    const bPenShare = (row.rf ?? 0) / nb;
 
     const rEA = mean(red.map(t => ratings[t]  ?? initEpa(t)));
     const bEA = mean(blue.map(t => ratings[t] ?? initEpa(t)));
@@ -794,12 +799,12 @@ function buildEpa(rows){
 
     // Main EPA updates — Statbotics style: K based on global match count so EPA converges
     for(const t of red){
-      const k = kFactor(mc[t]||0);
+      const k = kFactor(mcEvent[t]||0);
       const myEpa = ratings[t] ?? initEpa(t);
       ratings[t] = myEpa + epaUpdate(k, m, rShare, myEpa, bShare, bEA);
     }
     for(const t of blue){
-      const k = kFactor(mc[t]||0);
+      const k = kFactor(mcEvent[t]||0);
       const myEpa = ratings[t] ?? initEpa(t);
       ratings[t] = myEpa + epaUpdate(k, m, bShare, myEpa, rShare, rEA);
     }
@@ -821,10 +826,10 @@ function buildEpa(rows){
     // Auto sub-EPA updates — global mc for K, individual auto EPA as baseline
     for(let i = 0; i < red.length; i++){
       const t = red[i];
-      const k = kFactor(mc[t]||0);
+      const k = kFactor(mcEvent[t]||0);
       const aShare = rAutoShares[i];
       const myAutoEpa = autoR[t] ?? initEpa(t) * AUTO_PRIOR_FRAC;
-      const d = k * clip(aShare - myAutoEpa, -ERROR_CLIP, ERROR_CLIP);
+      const d = k * (aShare - myAutoEpa);
       autoR[t] = Math.min((autoR[t]??0) + d, ratings[t]);
       if(!autoHistory[t]) autoHistory[t] = [];
       autoHistory[t].push(aShare);
@@ -832,10 +837,10 @@ function buildEpa(rows){
     }
     for(let i = 0; i < blue.length; i++){
       const t = blue[i];
-      const k = kFactor(mc[t]||0);
+      const k = kFactor(mcEvent[t]||0);
       const aShare = bAutoShares[i];
       const myAutoEpa = autoR[t] ?? initEpa(t) * AUTO_PRIOR_FRAC;
-      const d = k * clip(aShare - myAutoEpa, -ERROR_CLIP, ERROR_CLIP);
+      const d = k * (aShare - myAutoEpa);
       autoR[t] = Math.min((autoR[t]??0) + d, ratings[t]);
       if(!autoHistory[t]) autoHistory[t] = [];
       autoHistory[t].push(aShare);
@@ -845,24 +850,22 @@ function buildEpa(rows){
     // (pat/park/pen averages removed — each team now updates against their own baseline)
 
     for(const t of red){
-      const k = kFactor(mc[t]||0);
+      const k = kFactor(mcEvent[t]||0);
       if(rPatShare > 0 || (row.rPatPts !== undefined)){
-        patR[t] = Math.max(0, (patR[t]??0) + k * clip(rPatShare - (patR[t]??0), -ERROR_CLIP, ERROR_CLIP));
+        patR[t] = Math.max(0, (patR[t]??0) + k * (rPatShare - (patR[t]??0)));
       }
       if(rParkShare > 0 || (row.rParkPts !== undefined)){
-        parkR[t] = Math.max(0, (parkR[t]??0) + k * clip(rParkShare - (parkR[t]??0), -ERROR_CLIP, ERROR_CLIP));
+        parkR[t] = Math.max(0, (parkR[t]??0) + k * (rParkShare - (parkR[t]??0)));
       }
-      penR[t] = Math.max(0, (penR[t]??0) + k * clip(rPenShare - (penR[t]??0), -ERROR_CLIP, ERROR_CLIP));
     }
     for(const t of blue){
-      const k = kFactor(mc[t]||0);
+      const k = kFactor(mcEvent[t]||0);
       if(bPatShare > 0 || (row.bPatPts !== undefined)){
-        patR[t] = Math.max(0, (patR[t]??0) + k * clip(bPatShare - (patR[t]??0), -ERROR_CLIP, ERROR_CLIP));
+        patR[t] = Math.max(0, (patR[t]??0) + k * (bPatShare - (patR[t]??0)));
       }
       if(bParkShare > 0 || (row.bParkPts !== undefined)){
-        parkR[t] = Math.max(0, (parkR[t]??0) + k * clip(bParkShare - (parkR[t]??0), -ERROR_CLIP, ERROR_CLIP));
+        parkR[t] = Math.max(0, (parkR[t]??0) + k * (bParkShare - (parkR[t]??0)));
       }
-      penR[t] = Math.max(0, (penR[t]??0) + k * clip(bPenShare - (penR[t]??0), -ERROR_CLIP, ERROR_CLIP));
     }
 
     for(const t of [...red,...blue]){
@@ -907,7 +910,7 @@ function buildEpa(rows){
   for(const t of allTeams) initialEpas[t] = initEpa(t);
   const fallback = seasonAvg * GLOBAL_FALLBACK_FRAC;
 
-  return {ratings, autoRatings:autoR, dcRatings:dcR, patternRatings:patR, parkRatings:parkR, penaltyRatings:penR,
+  return {ratings, autoRatings:autoR, dcRatings:dcR, patternRatings:patR, parkRatings:parkR,
           matchCounts:mc, seasonAvg, initialEpas, preEventEpas, chronoSnapshots, fallback,
           regionEarlyAvg, teamRegion, autoStability, autoHistory,
           momentumEpa, scheduleStrength, eloScale};
@@ -947,7 +950,7 @@ function shrunkEpaMap(snap, mcSnap, seasonAvg) {
 
 function computeSeasonAccuracy(chronoSnapshots){
   let correct = 0, total = 0;
-  for(const {row, snap, penSnap, mcSnap} of chronoSnapshots){
+  for(const {row, snap, mcSnap} of chronoSnapshots){
     if(row.rtot === undefined || row.rtot === null || row.rtot === row.btot) continue;
 
     const allTeams = [...row.rt, ...row.bt];
@@ -956,8 +959,7 @@ function computeSeasonAccuracy(chronoSnapshots){
 
     const shrunkSnap = mcSnap ? shrunkEpaMap(snap, mcSnap, ST.seasonAvg) : snap;
 
-    // Use improved win prob (momentum + schedule-strength correction)
-    const rwp = epaWinProb(row.rt, row.bt, shrunkSnap, ST.seasonAvg, penSnap || {}, ST.autoStability || {});
+    const rwp = epaWinProb(row.rt, row.bt, shrunkSnap, ST.seasonAvg, null, ST.autoStability || {});
     const pred = rwp > 0.5 ? 'red' : 'blue';
     const actual = row.rtot > row.btot ? 'red' : 'blue';
     if(pred === actual) correct++;
@@ -995,14 +997,17 @@ function parseMatchRow(season, m, scoreDetail, eventCode){
 
     const redT = +(m.scoreRedFinal||0);
     const bluT = +(m.scoreBlueFinal||0);
-    const redF = +(m.scoreRedFoul||0);
-    const bluF = +(m.scoreBlueFoul||0);
     const redA = +(m.scoreRedAuto||0);
     const bluA = +(m.scoreBlueAuto||0);
 
     const sd = scoreDetail || {};
-    const rsc = sd.red || {};
-    const bsc = sd.blue || {};
+    // scoreDetail uses sd.alliances array: [{alliance:"Red",...},{alliance:"Blue",...}]
+    const alliances = sd.alliances || [];
+    const rsc = alliances.find(a => a.alliance === 'Red')   || {};
+    const bsc = alliances.find(a => a.alliance === 'Blue')  || {};
+    // Prefer detailed foulPoints; fall back to hybrid scoreXFoul field
+    const redF = +(rsc.foulPoints ?? m.scoreRedFoul ?? 0);
+    const bluF = +(bsc.foulPoints ?? m.scoreBlueFoul ?? 0);
 
     const rPatPts  = +(rsc.patternPoints??rsc.patternBonusPoints??0);
     const bPatPts  = +(bsc.patternPoints??bsc.patternBonusPoints??0);
@@ -1021,10 +1026,10 @@ function parseMatchRow(season, m, scoreDetail, eventCode){
 
     return {
       season, event:code, match:`${code}-Q${m.matchNumber}`, rt, bt,
-      rs: redT - redF,   // red own score minus red own fouls only
-      bs: bluT - bluF,   // blue own score minus blue own fouls only
-      ra:Math.min(redA, redT-redF),
-      ba:Math.min(bluA, bluT-bluF),
+      rs: Math.max(0, redT - bluF),   // penalty-free: subtract fouls opponent drew (not own)
+      bs: Math.max(0, bluT - redF),
+      ra: Math.min(redA, Math.max(0, redT - bluF)),
+      ba: Math.min(bluA, Math.max(0, bluT - redF)),
       rtot:redT, btot:bluT, rf:redF, bf:bluF,
       won:redT>bluT?1:0,
       mt:m.actualStartTime||m.startTime||'',
@@ -1059,9 +1064,41 @@ async function fetchEventRows(season, eventCode){
   let schedule = result.schedule || result;
   if(!Array.isArray(schedule)) schedule = [];
 
+  // Fetch score details to get accurate foul/penalty points per match
+  let scoreMap = {};
+  try{
+    const scoresResult = await ftcFetchRetry(`/${season}/scores/${eventCode}/qual`);
+    const scoresList = scoresResult.matchScores || scoresResult.scores || [];
+
+    // Log first entry so we can see the real API structure
+    if(scoresList.length > 0){
+      console.log('[SCORES API] Sample entry for', eventCode, JSON.stringify(scoresList[0]).slice(0, 600));
+    } else {
+      console.warn('[SCORES API] Empty response for', eventCode, JSON.stringify(scoresResult).slice(0, 300));
+    }
+
+    for(const s of scoresList){
+      const num = s.matchNumber ?? s.matchNum;
+      if(num != null) scoreMap[num] = s;
+    }
+  } catch(e){
+    console.warn('[SCORES API] Failed for', eventCode, e.message);
+  }
+
+  // Log foul data for first parsed match so we can verify it's working
+  let _loggedFoul = false;
   const rows = [];
   for(const m of schedule){
-    const row = parseMatchRow(season, m, null, eventCode);
+    const sd = scoreMap[m.matchNumber] || null;
+    const row = parseMatchRow(season, m, sd, eventCode);
+    if(row && !_loggedFoul && (row.rf > 0 || row.bf > 0)){
+      console.log('[FOUL CHECK]', eventCode, 'match', m.matchNumber,
+        '| rf=', row.rf, 'bf=', row.bf,
+        '| rtot=', row.rtot, 'rs=', row.rs,
+        '| btot=', row.btot, 'bs=', row.bs,
+        '| sd keys:', sd ? Object.keys(sd) : 'null');
+      _loggedFoul = true;
+    }
     if(row) rows.push(row);
   }
   return rows;
@@ -1126,8 +1163,92 @@ async function fetchAllMatches(season){
   if(ST._cancelLoad){ ST.loading = false; setLive(false); return; }
 
   setProgress(98);
-  dbg(`Done: ${all.length} rows, ${failCount} event failures`);
+  // Foul coverage diagnostic
+  const withFouls = all.filter(r => r.rf > 0 || r.bf > 0).length;
+  const played    = all.filter(r => r.rtot !== undefined && r.rtot !== null).length;
+  const avgRf = all.length ? (all.reduce((s,r)=>s+(r.rf||0),0)/all.length).toFixed(2) : 0;
+  const avgBf = all.length ? (all.reduce((s,r)=>s+(r.bf||0),0)/all.length).toFixed(2) : 0;
+  dbg(`Done: ${all.length} rows, ${failCount} failures | fouls: ${withFouls}/${played} played matches have foul pts (avg rf=${avgRf} bf=${avgBf})`);
+  console.log('[FOUL SUMMARY] matches with foul data:', withFouls, '/', played,
+    '| avg rf:', avgRf, 'avg bf:', avgBf,
+    '| sample row rf/bf:', all.find(r=>r.rf>0)?.rf, '/', all.find(r=>r.bf>0)?.bf);
   return all;
+}
+
+// ═══════════════════════════════════════════════════════════
+// PLAYOFF BRACKET FETCH + PREDICTIONS
+// ═══════════════════════════════════════════════════════════
+async function fetchPlayoffRows(season, eventCode){
+  let result;
+  try{ result = await ftcFetchRetry(`/${season}/schedule/${eventCode}/playoff/hybrid`); }
+  catch(e){ dbg(`${eventCode} playoff hybrid failed: ${e.message}`); return []; }
+  let schedule = result.schedule || result;
+  if(!Array.isArray(schedule)) schedule = [];
+  const rows = [];
+  for(const m of schedule){
+    const row = parseMatchRow(season, m, null, eventCode);
+    if(row){ row.level = 'playoff'; row.match = `${eventCode}-PO${m.matchNumber}`; rows.push(row); }
+  }
+  return rows;
+}
+
+function playoffMatchRowH(row, idx, snap){
+  const rwp        = epaWinProb(row.rt, row.bt, snap, ST.seasonAvg, null, ST.autoStability);
+  const predWinner = rwp > 0.5 ? 'red' : 'blue';
+  const rb         = Math.round(rwp * 100);
+  const played     = row.rtot !== undefined && row.rtot !== null;
+  let actualWinner = null;
+  if(played){
+    if(row.rtot !== undefined && row.btot !== undefined)
+      actualWinner = row.rtot > row.btot ? 'red' : row.btot > row.rtot ? 'blue' : 'tie';
+  }
+  const predCorrect = actualWinner ? (predWinner === actualWinner || actualWinner === 'tie') : null;
+  const checkH = predCorrect === null ? `<span class="check-tbd">—</span>`
+    : predCorrect ? `<span class="check-ok">✓</span>` : `<span class="check-no">✗</span>`;
+  const statusBadge = played
+    ? `<span class="status-badge badge-played">PLAYED</span>`
+    : `<span class="status-badge badge-pending">SCHED</span>`;
+  const scoreH = played && row.rtot !== undefined
+    ? `<div class="mr-score-val mono"><span style="color:var(--red)">${row.rtot}</span><span class="dim"> – </span><span style="color:var(--accent2)">${row.btot}</span></div>`
+    : `<div class="mr-score-val mono dim">TBD</div>`;
+
+  // team card for each team showing their current EPA
+  const snap2 = {...snap};
+  for(const t of [...row.rt,...row.bt]) if(snap2[t]===undefined) snap2[t]=regionalFallback(t,ST.seasonAvg);
+  const teamPill = t => {
+    const e = snap2[t] ?? ST.ratings[t] ?? regionalFallback(t,ST.seasonAvg);
+    return `<span style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-size:10px;font-family:var(--mono);margin-right:3px" title="EPA ${e.toFixed(1)}">${t}</span>`;
+  };
+
+  const rEpaSum = row.rt.reduce((s,t)=>s+(snap2[t]??0),0);
+  const bEpaSum = row.bt.reduce((s,t)=>s+(snap2[t]??0),0);
+
+  return `<div class="match-row" style="border-left:3px solid var(--yellow)">
+    <div class="mr-num" style="color:var(--yellow)">${idx}</div>
+    <div class="mr-alliances">
+      <div class="mr-alliance">
+        <div class="mr-dot red"></div>
+        <div class="mr-teams">${row.rt.map(teamPill).join('')}</div>
+        ${statusBadge}
+      </div>
+      <div class="mr-alliance" style="margin-top:3px">
+        <div class="mr-dot blue"></div>
+        <div class="mr-teams">${row.bt.map(teamPill).join('')}</div>
+        <span class="mono dim" style="font-size:9px">red Σ${rEpaSum.toFixed(0)} · blue Σ${bEpaSum.toFixed(0)}</span>
+      </div>
+    </div>
+    <div class="mr-pred">
+      <div class="mr-pred-lbl">Prediction</div>
+      <div class="mr-pred-val" style="color:${predWinner==='red'?'var(--red)':'var(--accent2)'}">${predWinner.toUpperCase()}</div>
+      <div class="mr-wbar"><div class="wr" style="width:${rb}%"></div><div class="wb" style="width:${100-rb}%"></div></div>
+      <div class="mono dim" style="font-size:9px">${rb}% red</div>
+    </div>
+    <div class="mr-result">
+      <div class="mr-result-lbl">Result</div>
+      ${scoreH}
+    </div>
+    <div class="mr-check">${checkH}</div>
+  </div>`;
 }
 
 async function fetchTeamMatchesDirect(season, team){
@@ -1163,6 +1284,71 @@ function setLive(on){
   document.getElementById('ldot')?.classList.toggle('on', on);
   const s = document.getElementById('live-status');
   if(s) s.textContent = on ? 'live' : 'offline';
+}
+
+// Fetches and caches prior season final EPA ratings.
+// Uses its own low-concurrency fetch so it doesn't block or clobber the main UI.
+// Cache is frozen — never invalidated — since prior season data never changes.
+const PRIOR_SEASONS_BACK = 5;
+const PRIOR_DECAY        = 0.6; // season-1=0.6, season-2=0.36, season-3=0.22 …
+
+async function fetchOnePriorSeason(season){
+  const cacheKey = getPriorSeasonCacheKey(season);
+  try{
+    const cached = localStorage.getItem(cacheKey);
+    if(cached) return JSON.parse(cached);
+  } catch(e){ localStorage.removeItem(cacheKey); }
+
+  setMsg(`Seeding career priors: fetching ${season} data… (first load only)`);
+  try{
+    const evData = await ftcFetch(`/${season}/events`);
+    const events = (evData.events||[]).filter(ev => !isOffseason((ev.code||'').toUpperCase(),(ev.typeName||ev.type||'').toLowerCase()));
+    const all = [];
+    let idx = 0;
+    async function w(){ while(idx < events.length){ const ev = events[idx++]; try{ all.push(...await fetchEventRows(season, ev.code)); }catch(e){} } }
+    await Promise.all(Array.from({length:5}, w));
+    if(!all.length) return null;
+    const ratings = buildEpa(all, {}).ratings;
+    try{ localStorage.setItem(cacheKey, JSON.stringify(ratings)); }catch(e){}
+    dbg(`Prior ${season}: ${Object.keys(ratings).length} teams cached`);
+    return ratings;
+  } catch(e){ dbg(`Prior ${season} failed: ${e.message}`); return null; }
+}
+
+async function fetchPriorSeasonRatings(currentSeason){
+  // Fetch all prior seasons sequentially (each is cached after first load)
+  const seasons = Array.from({length: PRIOR_SEASONS_BACK}, (_,i) => currentSeason - 1 - i);
+  const allRatings = {};
+  for(const s of seasons){
+    const ratings = await fetchOnePriorSeason(s);
+    if(ratings) allRatings[s] = ratings;
+  }
+  if(!Object.keys(allRatings).length) return {};
+
+  // Compute per-season avg for cross-season scaling
+  const seasonAvgs = {};
+  for(const [s, r] of Object.entries(allRatings)){
+    const vals = Object.values(r);
+    seasonAvgs[s] = vals.length ? mean(vals) : 0;
+  }
+
+  // Build career prior: exponentially weighted average across seasons
+  const careerPrior = {};
+  const allTeams = new Set(Object.values(allRatings).flatMap(r => Object.keys(r)));
+  for(const team of allTeams){
+    let weightedSum = 0, totalWeight = 0;
+    for(const [s, r] of Object.entries(allRatings)){
+      const raw = r[team];
+      if(raw === undefined || !seasonAvgs[s]) continue;
+      const age   = currentSeason - Number(s);
+      const w     = Math.pow(PRIOR_DECAY, age);
+      weightedSum += (raw / seasonAvgs[s]) * w; // store as fraction of that season's avg
+      totalWeight += w;
+    }
+    if(totalWeight > 0) careerPrior[team] = weightedSum / totalWeight; // normalised ratio
+  }
+  dbg(`Career prior built: ${Object.keys(careerPrior).length} teams across ${Object.keys(allRatings).length} seasons`);
+  return {_isCareer: true, careerPrior};
 }
 
 async function loadData(forceRefresh=false, season=TARGET_SEASON){
@@ -1208,7 +1394,7 @@ async function loadData(forceRefresh=false, season=TARGET_SEASON){
 
     ST.rows = [];
     ST.ratings = {}; ST.autoRatings = {}; ST.dcRatings = {};
-    ST.patternRatings = {}; ST.parkRatings = {}; ST.penaltyRatings = {};
+    ST.patternRatings = {}; ST.parkRatings = {};
     ST.matchCounts = {}; ST.initialEpas = {}; ST.preEventEpas = {};
     ST.regionEarlyAvg = {}; ST.teamRegion = {};
     ST.autoStability = {}; ST.autoHistory = {};
@@ -1217,8 +1403,10 @@ async function loadData(forceRefresh=false, season=TARGET_SEASON){
     ST.totalEvents = 0; ST.loadedEvents = 0;
 
     ST.rows = rows;
+    const priorRatings = await fetchPriorSeasonRatings(season);
+    ST.priorRatings = priorRatings;
     setMsg('Computing EPA ratings…');
-    const res = buildEpa(rows);
+    const res = buildEpa(rows, priorRatings);
     Object.assign(ST, res);
     ST.seasonAccuracy = computeSeasonAccuracy(res.chronoSnapshots);
     ST.loaded = true;
@@ -1235,7 +1423,7 @@ async function loadData(forceRefresh=false, season=TARGET_SEASON){
 // ═══════════════════════════════════════════════════════════
 // TAB MANAGEMENT
 // ═══════════════════════════════════════════════════════════
-const TABS = ['rankings','predictor','live','team','event','predrank'];
+const TABS = ['rankings','predictor','live','team','event','predrank','diag'];
 function showTab(t){
   TABS.forEach(id => { document.getElementById(`tab-${id}`).style.display = id===t?'':'none'; });
   TABS.forEach(id => { document.getElementById(`nav-${id}`).classList.toggle('active', id===t); });
@@ -1246,6 +1434,7 @@ function showTab(t){
   if(t==='team')      renderTeamTab();
   if(t==='event')     renderEventTab();
   if(t==='predrank')  renderPredRankTab();
+  if(t==='diag')       renderDiagTab();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1379,16 +1568,13 @@ function calcPred(){
   const red  = ST.predRed.map(Number).filter(t => t > 0);
   const blue = ST.predBlue.map(Number).filter(t => t > 0);
   if(!red.length || !blue.length) return null;
-  const rwp = epaWinProb(red, blue, ST.ratings, ST.seasonAvg, ST.penaltyRatings, ST.autoStability);
+  const rwp = epaWinProb(red, blue, ST.ratings, ST.seasonAvg, null, ST.autoStability);
   const teamEpa = t => ST.ratings[t] ?? regionalFallback(t, ST.seasonAvg);
-  const teamPen = t => ST.penaltyRatings[t] ?? (ST.seasonAvg * PENALTY_PRIOR_FRAC);
   const rA  = mean(red.map(teamEpa));
   const bA  = mean(blue.map(teamEpa));
-  const rPen = mean(red.map(teamPen));
-  const bPen = mean(blue.map(teamPen));
   return {red, blue, rwp, bwp:1-rwp, winner:rwp>.5?'RED':'BLUE',
-    rScore:Math.round((rA * EPA_INFLATE + rPen) * red.length),
-    bScore:Math.round((bA * EPA_INFLATE + bPen) * blue.length),
+    rScore:Math.round(rA * EPA_INFLATE * 2),
+    bScore:Math.round(bA * EPA_INFLATE * 2),
     rA, bA, rU:toU(rA, ST.seasonAvg), bU:toU(bA, ST.seasonAvg)};
 }
 
@@ -1497,8 +1683,8 @@ function calcLiveDeltas(){
   const blue = LV.blueTeams.map(Number).filter(t=>t>0);
   if(!red.length||!blue.length) return null;
   const nr = red.length, nb = blue.length;
-  const rNet = (LV.redScore-LV.redFoul)-LV.blueFoul;
-  const bNet = (LV.blueScore-LV.blueFoul)-LV.redFoul;
+  const rNet = LV.redScore - LV.redFoul;   // penalty-free
+  const bNet = LV.blueScore - LV.blueFoul;
   const rShare = rNet/nr, bShare = bNet/nb;
   const rAShare = Math.min(LV.redAuto/nr, rShare);
   const bAShare = Math.min(LV.blueAuto/nb, bShare);
@@ -1517,7 +1703,7 @@ function calcLiveDeltas(){
       const mc     = ST.matchCounts[t]||0;
       const k = kFactor(mc);
       const td = epaUpdate(k, m, shr, eaAvg, oppShr, oppAvg);
-      const ad = k*clip(ashr-aEaAvg, -ERROR_CLIP, ERROR_CLIP);
+      const ad = k*(ashr-aEaAvg);
       const after = before+td, aAfter = Math.min(aBef+ad, after);
       deltas.push({team:t, ally, before, after, aBef, aAfter, td, mc});
     }
@@ -1562,7 +1748,7 @@ function applyLive(){
   const red  = LV.redTeams.map(Number).filter(t=>t>0);
   const blue = LV.blueTeams.map(Number).filter(t=>t>0);
   ST.rows.push({season:TARGET_SEASON, rt:red, bt:blue,
-    rs:(LV.redScore-LV.redFoul)-LV.blueFoul, bs:(LV.blueScore-LV.blueFoul)-LV.redFoul,
+    rs: Math.max(0, LV.redScore - LV.redFoul), bs: Math.max(0, LV.blueScore - LV.blueFoul),
     ra:LV.redAuto, ba:LV.blueAuto, rtot:LV.redScore, btot:LV.blueScore,
     rf:LV.redFoul, bf:LV.blueFoul, won:LV.redScore>LV.blueScore?1:0,
     mt:new Date().toISOString(), event:'LIVE', level:'qual'});
@@ -1617,8 +1803,8 @@ async function lookupTeam(team){
         const redT=+rs.totalPoints||0, bluT=+bs.totalPoints||0;
         const redF=+rs.foulPoints||0,  bluF=+bs.foulPoints||0;
         newRows.push({season:TARGET_SEASON, event:(m.eventCode||'unknown').toUpperCase(), match:m.id, rt, bt,
-          rs: redT - redF, bs: bluT - bluF,   // own points minus own fouls only
-          ra:Math.min(+rs.autoPoints||0,redT-redF), ba:Math.min(+bs.autoPoints||0,bluT-bluF),
+          rs: Math.max(0, redT - bluF), bs: Math.max(0, bluT - redF),
+          ra:Math.min(+rs.autoPoints||0, redT - bluF), ba:Math.min(+bs.autoPoints||0, bluT - redF),
           rtot:redT, btot:bluT, rf:redF, bf:bluF, won:redT>bluT?1:0,
           mt:m.actualStartTime||m.scheduledStartTime||'',
           level:'qual',
@@ -1627,7 +1813,7 @@ async function lookupTeam(team){
       } catch(e){}
     }
     if(!newRows.length){ el.innerHTML=`<div class="warn-box">Could not parse match data for team ${team}.</div>`; return; }
-    const res = buildEpa([...ST.rows,...newRows]);
+    const res = buildEpa([...ST.rows,...newRows], ST.priorRatings || {});
     Object.assign(ST, res);
     el.innerHTML=teamDetailH(team, teamName);
   } catch(e){ el.innerHTML=`<div class="warn-box">Error: ${e.message}</div>`; }
@@ -1681,7 +1867,6 @@ function teamDetailH(team, teamName){
         <div class="epa-item"><div class="epa-label">Teleop EPA</div><div class="epa-value" style="color:var(--orange)">${s.teleop_epa.toFixed(1)}</div></div>
         <div class="epa-item"><div class="epa-label">Pattern EPA</div><div class="epa-value" style="color:var(--purple);font-size:16px">${(ST.patternRatings[team]??0).toFixed(1)}</div></div>
         <div class="epa-item"><div class="epa-label">Park EPA</div><div class="epa-value" style="color:var(--yellow);font-size:16px">${(ST.parkRatings[team]??0).toFixed(1)}</div></div>
-        <div class="epa-item"><div class="epa-label">Foul Drawn</div><div class="epa-value" style="color:var(--red);font-size:16px">${(ST.penaltyRatings[team]??0).toFixed(1)}</div></div>
       </div>
       ${(()=>{
         const stab = s.auto_stability ?? 1.0;
@@ -1816,7 +2001,7 @@ function eventListH(events){
 
 function refreshEvList(){ const el=document.getElementById('event-list-items'); if(el) el.innerHTML=eventListH(getEventIndex()); }
 
-function selectEvent(code){
+async function selectEvent(code){
   const eventRows = ST.rows.filter(r=>(r.event||'').toUpperCase()===code);
   if(!eventRows.length) return;
   const rows = eventRows.map(r=>({...r,played:r.rtot!==undefined&&r.rtot!==null}))
@@ -1825,43 +2010,93 @@ function selectEvent(code){
   let correct=0,total=0;
   for(const row of rows){
     if(!row.played||row.rtot===row.btot) continue;
-    const rwp    = epaWinProb(row.rt, row.bt, snap, ST.seasonAvg, ST.penaltyRatings);
+    const rwp    = epaWinProb(row.rt, row.bt, snap, ST.seasonAvg, null);
     const winner = rwp>0.5?'red':'blue';
     const actual = row.rtot>row.btot?'red':'blue';
     if(winner===actual) correct++;
     total++;
   }
-  ST.eventData = {code, rows, correct, total};
+  ST.eventData = {code, rows, correct, total, playoffRows:[], loadingPlayoffs:true};
   const dp = document.getElementById('event-detail-panel');
   if(dp) dp.innerHTML = renderEventDetail(ST.eventData);
   document.querySelectorAll('.event-item').forEach(el=>{
     el.classList.toggle('active', el.querySelector('.ev-code')?.textContent===code);
   });
+
+  // async: fetch playoff bracket in background and re-render when ready
+  fetchPlayoffRows(TARGET_SEASON, code).then(poRows => {
+    if(!ST.eventData || ST.eventData.code !== code) return;
+    ST.eventData.playoffRows = poRows;
+    ST.eventData.loadingPlayoffs = false;
+    const dp2 = document.getElementById('event-detail-panel');
+    if(dp2) dp2.innerHTML = renderEventDetail(ST.eventData);
+  }).catch(() => {
+    if(ST.eventData && ST.eventData.code === code) {
+      ST.eventData.loadingPlayoffs = false;
+      const dp2 = document.getElementById('event-detail-panel');
+      if(dp2) dp2.innerHTML = renderEventDetail(ST.eventData);
+    }
+  });
 }
 
 function renderEventDetail(data){
-  const {code,rows,correct,total} = data;
+  const {code,rows,correct,total,playoffRows,loadingPlayoffs} = data;
   const played  = rows.filter(r=>r.played).length;
   const pending = rows.length-played;
   const acc     = total>0?Math.round(correct/total*100):null;
   const snap    = ST.preEventEpas[code]||{};
   const region  = extractRegion(code);
   const regAvg  = ST.regionEarlyAvg[region];
+  const poRows = playoffRows || [];
+  const poPlayed = poRows.filter(r=>r.rtot!==undefined&&r.rtot!==null).length;
+
+  // Compute playoff accuracy using end-of-qual EPA (current ratings, not preEventEpas)
+  let poCorrect=0, poTotal=0;
+  for(const row of poRows){
+    if(row.rtot==null||row.btot==null||row.rtot===row.btot) continue;
+    const curSnap = {};
+    for(const t of [...row.rt,...row.bt]) curSnap[t] = ST.ratings[t] ?? regionalFallback(t,ST.seasonAvg);
+    const rwp = epaWinProb(row.rt,row.bt,curSnap,ST.seasonAvg,null,ST.autoStability);
+    const pred = rwp>0.5?'red':'blue';
+    const actual = row.rtot>row.btot?'red':'blue';
+    if(pred===actual) poCorrect++; poTotal++;
+  }
+  const poAcc = poTotal>0 ? Math.round(poCorrect/poTotal*100) : null;
+
+  const playoffSection = loadingPlayoffs
+    ? `<div class="section-header" style="margin-top:20px"><div class="section-title" style="color:var(--yellow)">🏆 Playoff Predictions</div><div class="mono dim" style="font-size:10px">Fetching…</div></div><div class="spinner" style="margin:16px auto 0"></div>`
+    : poRows.length === 0
+      ? `<div class="section-header" style="margin-top:20px"><div class="section-title" style="color:var(--yellow)">🏆 Playoff Predictions</div><div class="mono dim" style="font-size:10px">No playoff matches found</div></div>`
+      : `<div class="section-header" style="margin-top:20px">
+          <div class="section-title" style="color:var(--yellow)">🏆 Playoff Predictions</div>
+          <div class="mono dim" style="font-size:10px">
+            ${poPlayed}/${poRows.length} played
+            ${poAcc!==null?` · Accuracy: ${poAcc}% (${poCorrect}/${poTotal})`:''}
+            · Uses final qual EPA
+          </div>
+        </div>
+        <div class="info-box" style="margin-bottom:10px;background:rgba(217,119,6,0.06);border-color:rgba(217,119,6,0.2);color:var(--yellow)">
+          ⚡ Playoff EPAs reflect each team's full-season rating entering playoffs — team pills show EPA on hover.
+        </div>
+        ${poRows.map((row,i)=>playoffMatchRowH(row,i+1,ST.ratings)).join('')}`;
+
   return `
     <div class="stat-grid" style="margin-bottom:14px">
       <div class="stat-card"><div class="sc-label">Event</div><div class="sc-val blue" style="font-size:16px">${code}</div><div class="sc-sub">Region: ${region}${regAvg?` · avg ${regAvg.toFixed(1)}`:''}  </div></div>
-      <div class="stat-card"><div class="sc-label">Matches</div><div class="sc-val">${rows.length}</div><div class="sc-sub">${played} played · ${pending} pending</div></div>
-      ${acc!==null?`<div class="stat-card"><div class="sc-label">Pred. Accuracy</div><div class="sc-val ${acc>=70?'green':acc>=55?'blue':'orange'}">${acc}%</div><div class="sc-sub">${correct}/${total} · regional prior</div></div>`:''}
+      <div class="stat-card"><div class="sc-label">Qual Matches</div><div class="sc-val">${rows.length}</div><div class="sc-sub">${played} played · ${pending} pending</div></div>
+      ${acc!==null?`<div class="stat-card"><div class="sc-label">Qual Accuracy</div><div class="sc-val ${acc>=70?'green':acc>=55?'blue':'orange'}">${acc}%</div><div class="sc-sub">${correct}/${total} · regional prior</div></div>`:''}
+      ${poAcc!==null?`<div class="stat-card"><div class="sc-label">Playoff Acc.</div><div class="sc-val ${poAcc>=70?'green':poAcc>=55?'blue':'orange'}">${poAcc}%</div><div class="sc-sub">${poCorrect}/${poTotal} · final EPA</div></div>`:''}
     </div>
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-      <div class="section-title">Matches</div>
+      <div class="section-title">Qualification Matches</div>
       <div class="mono dim" style="font-size:10px">✓ correct &nbsp;✗ wrong &nbsp;— pending</div>
     </div>
-    ${rows.map((row,i)=>matchRowH(row,i+1,snap)).join('')}`;
+    ${rows.map((row,i)=>matchRowH(row,i+1,snap)).join('')}
+    ${playoffSection}`;
 }
 
 function matchRowH(row, idx, snap){
-  const rwp        = epaWinProb(row.rt, row.bt, snap, ST.seasonAvg, ST.penaltyRatings);
+  const rwp        = epaWinProb(row.rt, row.bt, snap, ST.seasonAvg, null);
   const predWinner = rwp>0.5?'red':'blue';
   const rb         = Math.round(rwp*100);
   const played     = row.played||(row.rtot!==undefined&&(row.rtot>0||row.btot>0));
@@ -1919,6 +2154,229 @@ function renderPredRankTab(){
 
 function predRankTableH(code){
   const allEventRows = ST.rows.filter(r=>(r.event||'').toUpperCase()===code);
+
+// ═══════════════════════════════════════════════════════════
+// DIAGNOSTICS TAB
+// ═══════════════════════════════════════════════════════════
+function renderDiagTab(){
+  const el = document.getElementById('tab-diag');
+  if(!el) return;
+  if(!ST.loaded){ el.innerHTML = `<div class="empty">Load data first.</div>`; return; }
+
+  const snapshots = ST.chronoSnapshots || [];
+  if(!snapshots.length){ el.innerHTML = `<div class="empty">No snapshot data available.</div>`; return; }
+
+  // ── Rebuild prediction results from snapshots ──────────────────────────────
+  const byRegion  = {};   // region -> {correct, total}
+  const byMargin  = {};   // bucket label -> {correct, total}
+  const byTeam    = {};   // team -> {correct, total, wrongMatches:[]}
+  let tossups = 0, totalPred = 0;
+
+  const MARGIN_BUCKETS = [
+    {label:'0–5 pts',  lo:0,  hi:5 },
+    {label:'6–15 pts', lo:6,  hi:15},
+    {label:'16–30 pts',lo:16, hi:30},
+    {label:'31+ pts',  lo:31, hi:999},
+  ];
+
+  for(const {row, snap, mcSnap} of snapshots){
+    if(row.rtot == null || row.btot == null || row.rtot === row.btot) continue;
+    const allTeams = [...row.rt, ...row.bt];
+    const minMc = Math.min(...allTeams.map(t => (mcSnap && mcSnap[t]) || 0));
+    if(minMc < MIN_MATCHES_FOR_PRED) continue;
+
+    const shrunkSnap = mcSnap ? shrunkEpaMap(snap, mcSnap, ST.seasonAvg) : snap;
+    const rwp = epaWinProb(row.rt, row.bt, shrunkSnap, ST.seasonAvg, null, ST.autoStability || {});
+    const pred   = rwp > 0.5 ? 'red' : 'blue';
+    const actual = row.rtot > row.btot ? 'red' : 'blue';
+    const correct = pred === actual;
+    const margin  = Math.abs(row.rtot - row.btot);
+    const isTossup = rwp >= 0.45 && rwp <= 0.55;
+
+    totalPred++;
+    if(isTossup) tossups++;
+
+    // Region breakdown — use event code from the row
+    const region = extractRegion((row.event || '').toUpperCase()) || 'OTHER';
+    if(!byRegion[region]) byRegion[region] = {correct:0, total:0};
+    byRegion[region].total++;
+    if(correct) byRegion[region].correct++;
+
+    // Margin bucket
+    for(const b of MARGIN_BUCKETS){
+      if(margin >= b.lo && margin <= b.hi){
+        if(!byMargin[b.label]) byMargin[b.label] = {correct:0, total:0};
+        byMargin[b.label].total++;
+        if(correct) byMargin[b.label].correct++;
+        break;
+      }
+    }
+
+    // Per-team
+    for(const t of allTeams){
+      if(!byTeam[t]) byTeam[t] = {correct:0, total:0, wrong:[]};
+      byTeam[t].total++;
+      if(correct){ byTeam[t].correct++; }
+      else {
+        const myAlliance = row.rt.includes(t) ? 'red' : 'blue';
+        byTeam[t].wrong.push({
+          event: row.event || '?',
+          predWinner: pred,
+          actual,
+          margin,
+          myAlliance,
+          rwp: myAlliance === 'red' ? rwp : 1 - rwp,
+        });
+      }
+    }
+  }
+
+  // ── Region table ───────────────────────────────────────────────────────────
+  const regionRows = Object.entries(byRegion)
+    .filter(([,v]) => v.total >= 5)
+    .map(([region, v]) => ({region, ...v, pct: v.correct / v.total}))
+    .sort((a,b) => a.pct - b.pct); // worst first
+
+  const regionHtml = regionRows.map(r => {
+    const pct = Math.round(r.pct * 100);
+    const bar = pct;
+    const cls = pct >= 73 ? 'green' : pct >= 68 ? 'blue' : 'orange';
+    return `<tr>
+      <td class="mono" style="padding:6px 10px;font-weight:600">${r.region}</td>
+      <td style="padding:6px 10px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:120px;height:8px;background:var(--bg3);border-radius:4px;overflow:hidden">
+            <div style="width:${bar}%;height:100%;background:var(--${cls === 'green' ? 'accent2' : cls === 'blue' ? 'accent' : 'warn'}, #888);border-radius:4px"></div>
+          </div>
+          <span class="mono sc-val ${cls}" style="font-size:14px">${pct}%</span>
+        </div>
+      </td>
+      <td class="mono dim" style="padding:6px 10px;font-size:12px">${r.correct}/${r.total}</td>
+      <td class="mono dim" style="padding:6px 10px;font-size:12px">${r.total >= 20 ? '' : '⚠ small sample'}</td>
+    </tr>`;
+  }).join('');
+
+  // ── Margin bucket table ────────────────────────────────────────────────────
+  const marginHtml = MARGIN_BUCKETS.map(b => {
+    const v = byMargin[b.label];
+    if(!v) return '';
+    const pct = Math.round(v.correct / v.total * 100);
+    const cls = pct >= 73 ? 'green' : pct >= 68 ? 'blue' : 'orange';
+    return `<tr>
+      <td class="mono" style="padding:6px 10px;font-weight:600">${b.label}</td>
+      <td style="padding:6px 10px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:120px;height:8px;background:var(--bg3);border-radius:4px;overflow:hidden">
+            <div style="width:${pct}%;height:100%;background:var(--${cls === 'green' ? 'accent2' : cls === 'blue' ? 'accent' : 'warn'}, #888);border-radius:4px"></div>
+          </div>
+          <span class="mono sc-val ${cls}" style="font-size:14px">${pct}%</span>
+        </div>
+      </td>
+      <td class="mono dim" style="padding:6px 10px;font-size:12px">${v.correct}/${v.total}</td>
+    </tr>`;
+  }).join('');
+
+  // ── Worst-predicted teams ──────────────────────────────────────────────────
+  const worstTeams = Object.entries(byTeam)
+    .filter(([,v]) => v.total >= 5)
+    .map(([team, v]) => ({team:+team, ...v, pct: v.correct / v.total}))
+    .sort((a,b) => a.pct - b.pct)
+    .slice(0, 20);
+
+  const worstHtml = worstTeams.map(t => {
+    const pct = Math.round(t.pct * 100);
+    const region = ST.teamRegion[t.team] || '?';
+    const epa = ST.ratings[t.team];
+    const epaStr = epa !== undefined ? epa.toFixed(1) : '—';
+    // Diagnose: are wrong predictions when they're heavy favourite, underdog, or ~50/50?
+    const avgRwpOnWrong = t.wrong.length
+      ? (t.wrong.reduce((s,m) => s + m.rwp, 0) / t.wrong.length)
+      : 0;
+    const diagNote = avgRwpOnWrong > 0.65 ? '⚠ wrong as favourite'
+      : avgRwpOnWrong < 0.40 ? 'underdog upsets'
+      : 'toss-up losses';
+    return `<tr onclick="goTeam(${t.team})" style="cursor:pointer">
+      <td class="mono" style="padding:6px 10px;font-weight:700;color:var(--accent)">${t.team}</td>
+      <td class="mono dim" style="padding:6px 10px;font-size:12px">${region}</td>
+      <td class="mono" style="padding:6px 10px;font-size:13px;color:var(--${pct>=60?'text':'warn'})">${pct}%</td>
+      <td class="mono dim" style="padding:6px 10px;font-size:12px">${t.correct}/${t.total}</td>
+      <td class="mono dim" style="padding:6px 10px;font-size:12px">${epaStr} EPA</td>
+      <td class="mono dim" style="padding:6px 10px;font-size:11px">${diagNote}</td>
+    </tr>`;
+  }).join('');
+
+  const tossupPct = totalPred > 0 ? Math.round(tossups / totalPred * 100) : 0;
+  const overallPct = ST.seasonAccuracy ? ST.seasonAccuracy.pct : '—';
+
+  el.innerHTML = `
+    <div class="page-header">
+      <div class="page-title">Prediction Diagnostics</div>
+      <div class="page-desc">Where is the model getting it wrong? · ${totalPred} evaluated matches · ${tossupPct}% toss-ups (45–55% win prob)</div>
+    </div>
+    <div class="stats-row" style="margin-bottom:20px">
+      <div class="stat-card">
+        <div class="sc-label">Overall Accuracy</div>
+        <div class="sc-val ${overallPct >= 73 ? 'green' : overallPct >= 68 ? 'blue' : 'orange'}">${overallPct}%</div>
+        <div class="sc-sub">target: 73%</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">Toss-up Rate</div>
+        <div class="sc-val blue">${tossupPct}%</div>
+        <div class="sc-sub">45–55% win prob</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">Regions Tracked</div>
+        <div class="sc-val">${regionRows.length}</div>
+        <div class="sc-sub">≥5 matches</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
+      <div class="card">
+        <div class="card-title" style="padding:14px 16px 8px;font-weight:700;font-size:13px;border-bottom:1px solid var(--border)">Accuracy by Region <span class="mono dim" style="font-weight:400;font-size:11px">(worst first)</span></div>
+        <table style="width:100%;border-collapse:collapse">
+          <thead><tr style="border-bottom:1px solid var(--border)">
+            <th class="dim" style="padding:6px 10px;text-align:left;font-size:11px;font-weight:600">Region</th>
+            <th class="dim" style="padding:6px 10px;text-align:left;font-size:11px;font-weight:600">Accuracy</th>
+            <th class="dim" style="padding:6px 10px;text-align:left;font-size:11px;font-weight:600">W/T</th>
+            <th></th>
+          </tr></thead>
+          <tbody>${regionHtml || '<tr><td colspan="4" class="dim" style="padding:12px;text-align:center">No region data</td></tr>'}</tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title" style="padding:14px 16px 8px;font-weight:700;font-size:13px;border-bottom:1px solid var(--border)">Accuracy by Score Margin</div>
+        <table style="width:100%;border-collapse:collapse">
+          <thead><tr style="border-bottom:1px solid var(--border)">
+            <th class="dim" style="padding:6px 10px;text-align:left;font-size:11px;font-weight:600">Margin</th>
+            <th class="dim" style="padding:6px 10px;text-align:left;font-size:11px;font-weight:600">Accuracy</th>
+            <th class="dim" style="padding:6px 10px;text-align:left;font-size:11px;font-weight:600">W/T</th>
+          </tr></thead>
+          <tbody>${marginHtml}</tbody>
+        </table>
+        <div class="dim" style="padding:10px 14px;font-size:11px">Close games (0–5 pts) are near-random — the model correctly identifies the better team but margins that small are noise.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="padding:14px 16px 8px;font-weight:700;font-size:13px;border-bottom:1px solid var(--border)">
+        Most Mispredicted Teams <span class="mono dim" style="font-weight:400;font-size:11px">(≥5 matches, click to view team)</span>
+      </div>
+      <table style="width:100%;border-collapse:collapse">
+        <thead><tr style="border-bottom:1px solid var(--border)">
+          <th class="dim" style="padding:6px 10px;text-align:left;font-size:11px;font-weight:600">Team</th>
+          <th class="dim" style="padding:6px 10px;text-align:left;font-size:11px;font-weight:600">Region</th>
+          <th class="dim" style="padding:6px 10px;text-align:left;font-size:11px;font-weight:600">Accuracy</th>
+          <th class="dim" style="padding:6px 10px;text-align:left;font-size:11px;font-weight:600">W/T</th>
+          <th class="dim" style="padding:6px 10px;text-align:left;font-size:11px;font-weight:600">EPA</th>
+          <th class="dim" style="padding:6px 10px;text-align:left;font-size:11px;font-weight:600">Pattern</th>
+        </tr></thead>
+        <tbody>${worstHtml || '<tr><td colspan="6" class="dim" style="padding:12px;text-align:center">No data</td></tr>'}</tbody>
+      </table>
+    </div>`;
+}
+
+
   if(!allEventRows.length) return `<div class="empty">No match data for ${code}.</div>`;
   const isQual = r=>{ const lv=(r.level||'').toLowerCase(); return lv===''||lv==='qual'||lv==='qualification'; };
   const eventRows = allEventRows.filter(isQual);
@@ -1944,7 +2402,7 @@ function predRankTableH(code){
     const snapSmart = {...snap};
     for(const t of [...row.rt,...row.bt]) if(snapSmart[t]===undefined) snapSmart[t]=smartEpa(t);
 
-    const rwp = epaWinProb(row.rt, row.bt, snapSmart, ST.seasonAvg, ST.penaltyRatings, ST.autoStability);
+    const rwp = epaWinProb(row.rt, row.bt, snapSmart, ST.seasonAvg, null, ST.autoStability);
     const predWinner = rwp > 0.5 ? 'red' : 'blue';
     const isToss     = rwp >= 0.45 && rwp <= 0.55;
 
